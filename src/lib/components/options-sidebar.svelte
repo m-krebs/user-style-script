@@ -4,14 +4,14 @@
 
   const items = [
     {
-      title: 'Settings',
-      url: '#',
-      icon: Settings,
-    },
-    {
       title: 'Home',
       url: '#',
       icon: Home,
+    },
+    {
+      title: 'Settings',
+      url: '#',
+      icon: Settings,
     },
   ];
 </script>
