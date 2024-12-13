@@ -1,6 +1,6 @@
 {
-  "name": "wxt-svelte-starter",
-  "description": "manifest.json description",
+  "name": "User Style Script",
+  "description": "Let the User add JS and CSS to any site.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
