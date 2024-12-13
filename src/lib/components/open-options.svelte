@@ -10,10 +10,8 @@
       const existingTab = tabs.find((tab) => tab.url === optionsUrl);
 
       if (existingTab) {
-        console.log('exists');
         browser.tabs.update(existingTab.id as number, { active: true });
       } else {
-        console.log('exists not');
         browser.tabs.create({ url: optionsUrl });
       }
       window.close();
