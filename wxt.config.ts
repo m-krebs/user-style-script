@@ -1,5 +1,6 @@
 import { defineConfig } from 'wxt';
 import path from 'path'
+import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 
 
 // See https://wxt.dev/api/config.html
@@ -15,4 +16,7 @@ export default defineConfig({
     $lib: path.resolve("./src/lib/"),
     $assets: path.resolve("./src/assets/")
   },
+  vite: (env) => ({
+    plugins: [monacoEditorPlugin({ languageWorkers: ['editorWorkerService', 'typescript', 'css'] })]
+  }),
 });

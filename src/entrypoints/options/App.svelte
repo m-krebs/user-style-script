@@ -4,13 +4,7 @@
   import { Button } from '$lib/components/ui/button/index';
   import { ModeWatcher, toggleMode } from 'mode-watcher';
   import { Moon, Sun } from 'lucide-svelte';
-
-  const setIt = () => {
-    storage.setItem('local:options', {
-      rules: [{ name: 'abc', js: '' }],
-      info: { version: 11 },
-    });
-  };
+  import Editor from '$lib/components/editor.svelte';
 </script>
 
 <ModeWatcher />
@@ -29,16 +23,14 @@
       <span class="sr-only">Toggle theme</span>
     </Button>
 
-    {#await storage.getItem('local:options')}
-      <p>waiting for storage</p>
-    {:then value}
-      <pre>{JSON.stringify(value, null, 2)}</pre>
-      <!-- {#each Object.entries(value) as [key, value]} -->
-      <!--   <li><strong>{key}:</strong> {value}</li> -->
-      <!-- {/each} -->
-    {:catch error}
-      <p>Something went wrong: {error.message}</p>
-    {/await}
-    <Button onclick={setIt}>Update</Button>
+    <Editor
+      defaultValue={'body {\n\tposition: absolute\n\}'}
+      language="css"
+      vim
+    />
+    <Editor
+      defaultValue={'console.log("Hello, world!")'}
+      language="javascript"
+    />
   </main>
 </Sidebar.Provider>
