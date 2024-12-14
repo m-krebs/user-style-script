@@ -7,7 +7,7 @@
     const optionsUrl = browser.runtime.getURL('/options.html');
 
     browser.tabs.query({}, (tabs) => {
-      const existingTab = tabs.find((tab) => tab.url === optionsUrl);
+      const existingTab = tabs.find((tab) => tab.url!.startsWith(optionsUrl));
 
       if (existingTab) {
         browser.tabs.update(existingTab.id as number, { active: true });
