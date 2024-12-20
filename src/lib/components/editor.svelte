@@ -8,13 +8,13 @@
   type EditorLanguage = 'javascript' | 'typescript' | 'css' | 'scss';
 
   let {
-    defaultValue = '',
-    language,
-    vim,
+    placeholder = 'Type JavaScript here',
+    language = 'javascript',
+    vim = false,
   }: {
-    defaultValue: string;
-    language: EditorLanguage;
-    vim: boolean;
+    placeholder?: string;
+    language?: EditorLanguage;
+    vim?: boolean;
   } = $props();
 
   self.MonacoEnvironment = {
@@ -30,11 +30,12 @@
   };
 
   let monacoContainer: HTMLElement;
-  let vimStatus: HTMLElement;
+  let vimStatus: HTMLElement = $state(document.createElement('div'));
 
   onMount(() => {
+    monaco.editor.setTheme('vs-dark');
     const editor = monaco.editor.create(monacoContainer, {
-      value: defaultValue,
+      placeholder: placeholder,
       language: language,
       minimap: { enabled: false },
     });
@@ -46,8 +47,12 @@
 
 <div
   bind:this={monacoContainer}
-  class="h-[400px] w-[600px] border-4 border-r-4 border-red-700"
-></div>
-{#if vim}
-  <div bind:this={vimStatus} class="border-2 border-green-600"></div>
-{/if}
+  class="relative h-[400px] min-w-[50vw] border-4 border-r-4 border-red-700"
+>
+  {#if vim}
+    <div
+      bind:this={vimStatus}
+      class="absolute bottom-0 z-20 border-2 border-green-600 bg-black"
+    ></div>
+  {/if}
+</div>
