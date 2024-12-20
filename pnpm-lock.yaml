@@ -16,13 +16,13 @@ importers:
         version: 0.0.280
       '@wxt-dev/module-svelte':
         specifier: ^2.0.1
-        version: 2.0.1(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1))(wxt@0.19.22(@types/node@22.10.2)(lightningcss@1.28.2)(rollup@4.28.1)(yaml@2.6.1))
+        version: 2.0.2(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1))(wxt@0.19.22(@types/node@22.10.2)(lightningcss@1.28.2)(rollup@4.28.1)(yaml@2.6.1))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
       bits-ui:
-        specifier: 1.0.0-next.71
-        version: 1.0.0-next.71(svelte@5.11.2)
+        specifier: 1.0.0-next.74
+        version: 1.0.0-next.74(svelte@5.11.2)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -56,6 +56,12 @@ importers:
       svelte-check:
         specifier: ^4.0.7
         version: 4.1.1(picomatch@4.0.2)(svelte@5.11.2)(typescript@5.7.2)
+      svelte-sonner:
+        specifier: ^0.3.28
+        version: 0.3.28(svelte@5.11.2)
+      svelte-spa-router:
+        specifier: ^4.0.1
+        version: 4.0.1
       sveltekit-superforms:
         specifier: ^2.21.1
         version: 2.21.1(@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1)))(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1)))(@types/json-schema@7.0.15)(svelte@5.11.2)(typescript@5.7.2)
@@ -749,8 +755,8 @@ packages:
   '@webext-core/match-patterns@1.0.3':
     resolution: {integrity: sha512-NY39ACqCxdKBmHgw361M9pfJma8e4AZo20w9AY+5ZjIj1W2dvXC8J31G5fjfOGbulW9w4WKpT8fPooi0mLkn9A==}
 
-  '@wxt-dev/module-svelte@2.0.1':
-    resolution: {integrity: sha512-TzpLRyBAF5DbKakg2Qdu8wiHF4ZZTJWuxb7XDtXDEO5kthctKJ5MDcpISR2fqhOeyDZJI2x+UMf09086mBwygQ==}
+  '@wxt-dev/module-svelte@2.0.2':
+    resolution: {integrity: sha512-gB89epPMJL73bn2WCJWUr68jnz/5ubqjyOF8yPOaMBru+E/WTKdQDnVpGLMWS/j9BCFDoDaXneZ5maB0xChlAQ==}
     peerDependencies:
       svelte: '>=5'
       wxt: '>=0.18.6'
@@ -855,11 +861,11 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
-  bits-ui@1.0.0-next.71:
-    resolution: {integrity: sha512-ncZ42GwVpa1Ldw41opdLqP/HSkhNGNBnmfvWduYGZ0cVzDnkPwsUWvdikTsFI31ZoAMcfcUVFSVgLGCcBatUXQ==}
+  bits-ui@1.0.0-next.74:
+    resolution: {integrity: sha512-cazru5+NBKBCeK9KCV/OFy5I/B1zxOJGl5WpInzPTEPla5G9qZK9nrnXr6BbExKdhgusTiMm3h4Yvq4E5WHGJA==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
     peerDependencies:
-      svelte: ^5.0.0-next.1
+      svelte: ^5.0.0
 
   bl@5.1.0:
     resolution: {integrity: sha512-tv1ZJHLfTDnXE6tMHv73YgSJaWR2AFuPwMntBe7XL/GBFHnT0CLnsHMogfk5+GzCDC5ZWarSCYaIGATZt9dNsQ==}
@@ -2385,6 +2391,10 @@ packages:
   regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
 
+  regexparam@2.0.2:
+    resolution: {integrity: sha512-A1PeDEYMrkLrfyOwv2jwihXbo9qxdGD3atBYQA9JJgreAx8/7rC6IUkWOw2NQlOxLp2wL0ifQbh1HuidDfYA6w==}
+    engines: {node: '>=8'}
+
   registry-auth-token@5.0.3:
     resolution: {integrity: sha512-1bpc9IyC+e+CNFRaWyn77tk4xGG4PPUyfakSmA6F6cvUDjrm58dfyJ3II+9yb10EDkHoy1LaPSmHaWLOH3m6HA==}
     engines: {node: '>=14'}
@@ -2628,6 +2638,14 @@ packages:
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: '>=5.0.0'
+
+  svelte-sonner@0.3.28:
+    resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
+
+  svelte-spa-router@4.0.1:
+    resolution: {integrity: sha512-2JkmUQ2f9jRluijL58LtdQBIpynSbem2eBGp4zXdi7aDY1znbR6yjw0KsonD0aq2QLwf4Yx4tBJQjxIjgjXHKg==}
 
   svelte-toolbelt@0.4.6:
     resolution: {integrity: sha512-k8OUvXBUifHZcAlWeY/HLg/4J0v5m2iOfOhn8fDmjt4AP8ZluaDh9eBFus9lFiLX6O5l6vKqI1dKL5wy7090NQ==}
@@ -3543,7 +3561,7 @@ snapshots:
 
   '@webext-core/match-patterns@1.0.3': {}
 
-  '@wxt-dev/module-svelte@2.0.1(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1))(wxt@0.19.22(@types/node@22.10.2)(lightningcss@1.28.2)(rollup@4.28.1)(yaml@2.6.1))':
+  '@wxt-dev/module-svelte@2.0.2(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1))(wxt@0.19.22(@types/node@22.10.2)(lightningcss@1.28.2)(rollup@4.28.1)(yaml@2.6.1))':
     dependencies:
       '@sveltejs/vite-plugin-svelte': 4.0.2(svelte@5.11.2)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(lightningcss@1.28.2)(yaml@2.6.1))
       svelte: 5.11.2
@@ -3632,7 +3650,7 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
-  bits-ui@1.0.0-next.71(svelte@5.11.2):
+  bits-ui@1.0.0-next.74(svelte@5.11.2):
     dependencies:
       '@floating-ui/core': 1.6.8
       '@floating-ui/dom': 1.6.12
@@ -5133,6 +5151,8 @@ snapshots:
 
   regenerator-runtime@0.14.1: {}
 
+  regexparam@2.0.2: {}
+
   registry-auth-token@5.0.3:
     dependencies:
       '@pnpm/npm-conf': 2.3.1
@@ -5384,6 +5404,14 @@ snapshots:
       typescript: 5.7.2
     transitivePeerDependencies:
       - picomatch
+
+  svelte-sonner@0.3.28(svelte@5.11.2):
+    dependencies:
+      svelte: 5.11.2
+
+  svelte-spa-router@4.0.1:
+    dependencies:
+      regexparam: 2.0.2
 
   svelte-toolbelt@0.4.6(svelte@5.11.2):
     dependencies:
