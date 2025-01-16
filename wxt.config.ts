@@ -5,7 +5,8 @@ import path from 'path'
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   manifest: {
-    permissions: ['storage', 'tabs', 'userScripts']
+    permissions: ['storage', 'tabs', 'userScripts', 'scripting'],
+    host_permissions: ['<all_urls>']
   },
   manifestVersion: 3,
   srcDir: 'src',
