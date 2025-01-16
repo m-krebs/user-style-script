@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Sidebar from '$lib/components/ui/sidebar/index';
   import * as Collapsible from '$lib/components/ui/collapsible/index';
-  import { ChevronRight, Home, Settings } from 'lucide-svelte';
+  import { ChevronRight, Home, Puzzle, Settings } from 'lucide-svelte';
 
   const data = {
     settings: [
@@ -11,11 +11,11 @@
         items: [
           {
             title: 'General',
-            url: '#',
+            url: '#/settings',
           },
           {
             title: 'Appeareance',
-            url: '#',
+            url: '#/settings/appeareance',
           },
         ],
       },
@@ -30,6 +30,13 @@
         <Sidebar.MenuButton>
           {#snippet child({ props })}
             <a href="#/" {...props}><Home />Home</a>
+          {/snippet}
+        </Sidebar.MenuButton>
+      </Sidebar.MenuItem>
+      <Sidebar.MenuItem>
+        <Sidebar.MenuButton>
+          {#snippet child({ props })}
+            <a href="#/modules" {...props}><Puzzle />External Modules</a>
           {/snippet}
         </Sidebar.MenuButton>
       </Sidebar.MenuItem>

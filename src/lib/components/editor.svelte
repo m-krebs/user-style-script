@@ -3,14 +3,17 @@
   import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
   import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
   import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+  // @ts-ignore
   import { initVimMode } from 'monaco-vim';
+
+  let vimMode = $state(false);
 
   type EditorLanguage = 'javascript' | 'typescript' | 'css' | 'scss';
 
   let {
     placeholder = 'Type JavaScript here',
     language = 'javascript',
-    vim = false,
+    vim = undefined,
   }: {
     placeholder?: string;
     language?: EditorLanguage;
@@ -33,13 +36,19 @@
   let vimStatus: HTMLElement = $state(document.createElement('div'));
 
   onMount(() => {
+    if (vim === undefined) {
+      browser.storage.local.get(['settings']).then((settings) => {
+        vimMode = settings.edtior?.vimMode;
+      });
+    }
+
     monaco.editor.setTheme('vs-dark');
     const editor = monaco.editor.create(monacoContainer, {
       placeholder: placeholder,
       language: language,
       minimap: { enabled: false },
     });
-    if (vim) {
+    if (vimMode) {
       initVimMode(editor, vimStatus);
     }
   });

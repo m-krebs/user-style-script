@@ -3,19 +3,17 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { Settings } from 'lucide-svelte';
 
-  function openOptions() {
-    browser.runtime.openOptionsPage();
-  }
+  const onclick = () => browser.runtime.openOptionsPage();
 </script>
 
 <Tooltip.Provider>
-  <Tooltip.Root>
+  <Tooltip.Root delayDuration={300}>
     <Tooltip.Trigger>
-      <Button onclick={openOptions} variant="outline" size="icon">
+      <Button {onclick} variant="outline" size="icon">
         <Settings />
       </Button>
     </Tooltip.Trigger>
-    <Tooltip.Content>
+    <Tooltip.Content side={'left'}>
       <p>Open Options</p>
     </Tooltip.Content>
   </Tooltip.Root>
