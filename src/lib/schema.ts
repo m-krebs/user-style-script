@@ -13,10 +13,10 @@ export const RulesetSchema = z.object({
 	id: z.string(),
 	created: z.number(),
 	updated: z.number(),
-	modules: z.array(z.number()),
 	name: z.string(),
 	active: z.boolean(),
 	urls: z.string(),
+	modules: z.array(z.number()),
 });
 
 export type Ruleset = z.infer<typeof RulesetSchema>;

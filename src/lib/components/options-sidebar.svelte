@@ -23,13 +23,13 @@
   };
 </script>
 
-<Sidebar.Root>
-  <Sidebar.Content>
+<Sidebar.Root collapsible="icon">
+  <Sidebar.Content class="m-2">
     <Sidebar.Menu>
       <Sidebar.MenuItem>
         <Sidebar.MenuButton>
           {#snippet child({ props })}
-            <a href="#/" {...props}><Home />Home</a>
+            <a href="#/" {...props}><Home /><span>Home</span></a>
           {/snippet}
         </Sidebar.MenuButton>
       </Sidebar.MenuItem>
@@ -59,9 +59,11 @@
                 {#each setting.items as subItem}
                   <Sidebar.MenuSubItem>
                     <Sidebar.MenuSubButton>
-                      <a href={subItem.url}>
-                        {subItem.title}
-                      </a>
+                      {#snippet child({ props })}
+                        <a href={subItem.url} {...props}>
+                          {subItem.title}
+                        </a>
+                      {/snippet}
                     </Sidebar.MenuSubButton>
                   </Sidebar.MenuSubItem>
                 {/each}
