@@ -20,3 +20,13 @@ export const RulesetSchema = z.object({
 });
 
 export type Ruleset = z.infer<typeof RulesetSchema>;
+
+export const ExtModuleSchema = z.object({
+	id: z.string(),
+	name: z.string(),
+	source: z.string().url(),
+	hash: z.string(),
+	content: z.string()
+})
+
+export type ExtModule = z.infer<typeof ExtModuleSchema>;

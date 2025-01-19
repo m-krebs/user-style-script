@@ -1,11 +1,12 @@
 <script lang="ts">
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
-  import Separator from '$lib/components/ui/separator/separator.svelte';
-  import DataTable from '$lib/components/data-table.svelte';
   import { Plus } from 'lucide-svelte';
-  import { columns, type Ruleset } from './ruleset-columns';
+  import { columns } from './ruleset-columns';
   import { Button } from '$lib/components/ui/button';
   import { RulesetStorage } from '$lib/storage';
+  import type { Ruleset } from '$lib/schema';
+  import Separator from '$lib/components/ui/separator/separator.svelte';
+  import DataTable from '$lib/components/data-table.svelte';
 
   let data: Ruleset[] = $state([]);
 
@@ -22,12 +23,12 @@
   <div class="my-2 flex items-center justify-start gap-2">
     <SidebarTrigger class="p-4" />
     <Separator orientation="vertical" class="mr-2 h-4" />
-    <span class="text-sm">Your rulesets</span>
+    <span class="text-sm">Rulesets</span>
   </div>
-  <Separator class="mr-2 " />
-  <div class="flex justify-between p-2">
-    <Button href="#/ruleset-add" class="ml-auto">
-      Create new <Plus />
+  <Separator class="mr-2" />
+  <div class="flex justify-between py-2">
+    <Button href="#/ruleset/add" class="ml-auto">
+      Create new<Plus />
     </Button>
   </div>
   <DataTable bind:data {columns} />

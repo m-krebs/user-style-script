@@ -16,8 +16,8 @@
   const routes = {
     '/': Options,
     '/modules': Modules,
+    '/ruleset/add': RulesetAdd,
     '/ruleset/*': RulesetDetail,
-    '/ruleset-add': RulesetAdd,
     '/settings': Settings,
     '*': NotFound,
   };

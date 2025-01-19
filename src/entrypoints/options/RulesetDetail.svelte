@@ -3,19 +3,17 @@
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import { RulesetStorage } from '$lib/storage';
+  import Ruleset from './Ruleset.svelte';
 
   let { params } = $props();
 
   const ruleset = RulesetStorage.get(params.wild);
 </script>
 
-<div class="px-3">
+<div class="flex h-screen flex-col px-3">
   <div class="my-2 flex items-center justify-start gap-2">
     <SidebarTrigger class="p-4" />
     <Separator orientation="vertical" class="mr-2 h-4" />
-    <!-- <span class="text-sm"> -->
-    <!--   Edit Ruleset: {#await ruleset then data}{data!.name}{/await} -->
-    <!-- </span> -->
 
     <Breadcrumb.Root>
       <Breadcrumb.List>
@@ -31,7 +29,5 @@
   </div>
   <Separator />
 
-  {#await ruleset then r}
-    {JSON.stringify(r)}
-  {/await}
+  <Ruleset rulesetId={params.wild} />
 </div>

@@ -5,16 +5,19 @@
   import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
   // @ts-ignore
   import { initVimMode } from 'monaco-vim';
+  import { cn } from '$lib/utils';
 
   let vimMode = $state(false);
 
   type EditorLanguage = 'javascript' | 'typescript' | 'css' | 'scss';
 
   let {
+    class: className,
     placeholder = 'Type JavaScript here',
     language = 'javascript',
     vim = undefined,
   }: {
+    class?: string;
     placeholder?: string;
     language?: EditorLanguage;
     vim?: boolean;
@@ -56,7 +59,7 @@
 
 <div
   bind:this={monacoContainer}
-  class="relative h-[400px] min-w-[50vw] border-4 border-r-4 border-red-700"
+  class={cn('belative rounded-md border-2', className)}
 >
   {#if vim}
     <div
