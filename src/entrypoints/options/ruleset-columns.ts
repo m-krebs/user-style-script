@@ -6,6 +6,7 @@ import RulesetActions from "./RulesetActions.svelte"
 import { RulesetStorage } from "$lib/storage";
 import { push } from 'svelte-spa-router';
 import { Ruleset } from "$lib/schema";
+import { toast } from 'svelte-sonner'
 
 export const columns: ColumnDef<Ruleset>[] = [
   {
@@ -18,7 +19,14 @@ export const columns: ColumnDef<Ruleset>[] = [
     cell: ({ row }) => {
       return renderComponent(RulesetToggle, {
         id: row.original.id,
-        checked: row.original.active
+        checked: row.original.active,
+        onCheckedChange: async () => {
+          const ruleset = await RulesetStorage.get(row.original.id);
+          if (ruleset == undefined) return;
+          toast(row.original.active ? `Disabled ${row.original.name}` : `Enabled ${row.original.name}`)
+          ruleset.active = !ruleset.active;
+          RulesetStorage.add(ruleset)
+        }
       })
     }
   },

@@ -1,4 +1,4 @@
-import { Module, Ruleset } from "$lib/schema";
+import { ExtModule, Ruleset } from "$lib/schema";
 
 export const RulesetStorage = class {
 	static item = storage.defineItem<Ruleset[]>('local:rulesets', {
@@ -44,20 +44,21 @@ export const RulesetStorage = class {
 }
 
 export const ExtModuleStorage = class {
-	static item = storage.defineItem<Module[]>('local:modules', {
+	static item = storage.defineItem<ExtModule[]>('local:modules', {
 		defaultValue: [{
 			id: "30953483948932",
 			content: "alert('asdf')",
-			source: "",
+			source: "https://example.com",
 			hash: "asdjfkasjdfljdsk",
-			name: "jnotquery"
+			name: "jnotquery",
+			autoUpdate: true
 		}]
 	})
 
-	static watch(callback: (changedValue: Module[]) => void) { return ExtModuleStorage.item.watch(callback) }
+	static watch(callback: (changedValue: ExtModule[]) => void) { return ExtModuleStorage.item.watch(callback) }
 
-	static async add(ruleset: Module) {
-		let rules: Module[] = await ExtModuleStorage.item.getValue() as Module[];
+	static async add(ruleset: ExtModule) {
+		let rules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
 
 		const index = rules.findIndex(rule => rule.id == ruleset.id)
 		if (index == -1) {
@@ -78,7 +79,7 @@ export const ExtModuleStorage = class {
 	}
 
 	static async delete(id: string) {
-		let modules: Module[] = await ExtModuleStorage.item.getValue() as Module[];
+		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
 
 		ExtModuleStorage.item.setValue(modules.filter(rule => rule.id !== id))
 	}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
-  import { Plus } from 'lucide-svelte';
+  import { PlusCircle } from 'lucide-svelte';
   import { columns } from './ruleset-columns';
   import { Button } from '$lib/components/ui/button';
   import { RulesetStorage } from '$lib/storage';
@@ -26,10 +26,8 @@
     <span class="text-sm">Rulesets</span>
   </div>
   <Separator class="mr-2" />
-  <div class="flex justify-between py-2">
-    <Button href="#/ruleset/add" class="ml-auto">
-      Create new<Plus />
-    </Button>
-  </div>
+  <Button href="#/ruleset/add" class="my-2 w-full">
+    Create new<PlusCircle />
+  </Button>
   <DataTable bind:data {columns} />
 </div>

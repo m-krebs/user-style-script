@@ -26,7 +26,8 @@ export const ExtModuleSchema = z.object({
 	name: z.string(),
 	source: z.string().url(),
 	hash: z.string(),
-	content: z.string()
+	content: z.string(),
+	autoUpdate: z.boolean()
 })
 
 export type ExtModule = z.infer<typeof ExtModuleSchema>;
