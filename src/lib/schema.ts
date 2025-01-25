@@ -16,10 +16,13 @@ export const RulesetSchema = z.object({
 	name: z.string(),
 	active: z.boolean(),
 	urls: z.string(),
-	modules: z.array(z.number()),
+	modules: z.array(z.string()),
 });
 
+export const NoIDRulesetSchema = RulesetSchema.omit({ id: true })
+
 export type Ruleset = z.infer<typeof RulesetSchema>;
+export type NoIdRuleset = z.infer<typeof NoIDRulesetSchema>;
 
 export const ExtModuleSchema = z.object({
 	id: z.string(),
@@ -30,4 +33,12 @@ export const ExtModuleSchema = z.object({
 	autoUpdate: z.boolean()
 })
 
+
 export type ExtModule = z.infer<typeof ExtModuleSchema>;
+
+export const RulesetContentSchema = z.object({
+	js: z.string(),
+	css: z.string(),
+})
+
+export type RulesetContent = z.infer<typeof RulesetContentSchema>;

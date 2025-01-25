@@ -16,18 +16,9 @@
   } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
 
-  let { ruleset }: { ruleset?: Ruleset } = $props();
+  let { ruleset }: { ruleset: Ruleset } = $props();
 
-  let formRuleset: Ruleset | NoIdRuleset | undefined = $state(
-    ruleset ?? {
-      name: '',
-      active: true,
-      created: Date.now(),
-      updated: Date.now(),
-      modules: [],
-      urls: '',
-    },
-  );
+  let formRuleset: Ruleset = $state(ruleset);
 
   let modules: ExtModule[] = $state([]);
 
@@ -44,12 +35,10 @@
 
   let moduleLength = $derived(formRuleset?.modules.length);
 
-  const rulesetContent =
-    'id' in formRuleset
-      ? await storage
-          .defineItem<RulesetContent>(`local:${formRuleset?.id}`, {})
-          .getValue()
-      : '';
+  let rulesetContent = async () =>
+    await storage
+      .defineItem<RulesetContent>(`local:${formRuleset?.id}`, {})
+      .getValue();
 </script>
 
 <div class="mt-2 flex gap-2">
@@ -121,6 +110,11 @@
   </Button>
 </div>
 <div class="mt-2 flex h-full">
+  {#await rulesetContent}
+    Loading...
+  {:then data}
+    {data.js}
+  {/await}
   <Editor class="w-full" />
   <Editor class="w-full" language="scss" placeholder="Type SCSS/CSS here" />
 </div>

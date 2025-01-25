@@ -16,11 +16,13 @@
     placeholder = 'Type JavaScript here',
     language = 'javascript',
     vim = undefined,
+    value = $bindable(undefined),
   }: {
     class?: string;
     placeholder?: string;
     language?: EditorLanguage;
     vim?: boolean;
+    value?: string;
   } = $props();
 
   self.MonacoEnvironment = {
@@ -50,10 +52,15 @@
       placeholder: placeholder,
       language: language,
       minimap: { enabled: false },
+      value: value,
     });
     if (vimMode) {
       initVimMode(editor, vimStatus);
     }
+
+    editor.onEndUpdate((event) => {
+      console.log(editor.getValue());
+    });
   });
 </script>
 

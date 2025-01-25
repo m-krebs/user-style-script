@@ -25,7 +25,7 @@ export const columns: ColumnDef<Ruleset>[] = [
           if (ruleset == undefined) return;
           toast(row.original.active ? `Disabled ${row.original.name}` : `Enabled ${row.original.name}`)
           ruleset.active = !ruleset.active;
-          RulesetStorage.add(ruleset)
+          RulesetStorage.update(ruleset)
         }
       })
     }

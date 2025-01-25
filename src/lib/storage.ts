@@ -1,4 +1,11 @@
-import { ExtModule, Ruleset } from "$lib/schema";
+import { ExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
+import { WxtStorageItem } from "wxt/storage";
+
+export const defineRuleset = class {
+	constructor(uuid: string) {
+		this.item = storage.defineItem<RulesetContent>(`local:${uuid}`, {})
+	}
+}
 
 export const RulesetStorage = class {
 	static item = storage.defineItem<Ruleset[]>('local:rulesets', {
@@ -15,7 +22,20 @@ export const RulesetStorage = class {
 
 	static watch(callback: (changedValue: Ruleset[]) => void) { return RulesetStorage.item.watch(callback) }
 
-	static async add(ruleset: Ruleset) {
+	static async create(ruleset: NoIdRuleset) {
+		let rules: Ruleset[] = await RulesetStorage.item.getValue() as Ruleset[];
+
+		let uuid = crypto.randomUUID();
+		while (rules.find((ruleset) => ruleset.id === uuid)) {
+			uuid = crypto.randomUUID()
+		}
+
+		const newRuleset: Ruleset = { id: uuid, ...ruleset }
+
+		rules.push(newRuleset)
+	}
+
+	static async update(ruleset: Ruleset) {
 		let rules: Ruleset[] = await RulesetStorage.item.getValue() as Ruleset[];
 
 		const index = rules.findIndex(rule => rule.id == ruleset.id)

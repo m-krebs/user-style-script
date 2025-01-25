@@ -1,7 +1,13 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
-  import { CloudDownload, Pencil, Save, Trash } from 'lucide-svelte';
+  import {
+    CloudDownload,
+    LoaderCircle,
+    Pencil,
+    Save,
+    Trash,
+  } from 'lucide-svelte';
   import { Button } from '$lib/components/ui/button/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { ExtModuleStorage } from '$lib/storage';
@@ -37,7 +43,9 @@
     }
     return await response.text();
   }
+  let refreshFinished = $state(true);
   const updateContent = async () => {
+    refreshFinished = false;
     try {
       const text = await fetchScript(form!.source);
       form!.content = `${text}`;
@@ -45,6 +53,7 @@
     } catch (error) {
       toast.error(`Failed to fetch module`);
     }
+    refreshFinished = true;
   };
 </script>
 
@@ -64,7 +73,7 @@
       <Dialog.Header>
         <Dialog.Title>Edit Module</Dialog.Title>
       </Dialog.Header>
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2 pt-3">
         <Label for="name">Name</Label>
         <Input
           type="text"
@@ -82,12 +91,20 @@
           bind:value={form!.source}
         />
       </div>
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <Label for="autoupdate">Auto Update</Label>
         <Switch id="autoupdate" bind:checked={form!.autoUpdate} />
       </div>
-      <div class="flex">
-        <Button variant="ghost" class="w-full" onclick={updateContent}>
+      <div class="flex gap-3">
+        <Button
+          variant="outline"
+          class="w-full"
+          onclick={updateContent}
+          disabled={!refreshFinished}
+        >
+          {#if !refreshFinished}
+            <LoaderCircle class="animate-spin" />
+          {/if}
           <CloudDownload /> Manual Refresh
         </Button>
         <Button class="w-full" onclick={saveModule}><Save />Save</Button>
@@ -109,20 +126,14 @@
         <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
         <AlertDialog.Action>
           {#snippet child()}
-            <Button variant="destructive">Delete</Button>
+            <Button variant="destructive" onclick={deleteModule}>Delete</Button>
           {/snippet}
         </AlertDialog.Action>
       </AlertDialog.Footer>
     </AlertDialog.Content>
     <AlertDialog.Trigger>
       {#snippet child({ props })}
-        <Button
-          variant="ghost"
-          size="icon"
-          class="text-red-600"
-          {...props}
-          onclick={deleteModule}
-        >
+        <Button variant="ghost" size="icon" class="text-red-600" {...props}>
           <Trash />
         </Button>
       {/snippet}

@@ -29,5 +29,7 @@
   </div>
   <Separator />
 
-  <Ruleset rulesetId={params.wild} />
+  {#await ruleset then ruleset}
+    <Ruleset {ruleset} />
+  {/await}
 </div>
