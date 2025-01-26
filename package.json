@@ -1,19 +1,19 @@
 {
   "name": "User Style Script",
-  "description": "Let the User add JS and CSS to any site.",
   "private": true,
   "version": "0.0.0",
+  "description": "Let the User add JS and CSS to any site.",
   "type": "module",
   "scripts": {
-    "dev": "wxt",
-    "dev:firefox": "wxt -b firefox --mv2",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
-    "zip": "wxt zip",
-    "zip:firefox": "wxt zip -b firefox --mv2",
     "check": "svelte-check --tsconfig ./tsconfig.json",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox --mv2",
     "postinstall": "wxt prepare",
-    "lint": "prettier --check ."
+    "lint": "prettier --check .",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox --mv2"
   },
   "devDependencies": {
     "@tanstack/table-core": "^8.20.5",
