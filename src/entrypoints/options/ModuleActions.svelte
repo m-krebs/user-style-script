@@ -18,6 +18,7 @@
 
   let { id } = $props();
 
+  let open = $state(false);
   let form: ExtModule | undefined = $state();
   onMount(async () => {
     form = await ExtModuleStorage.get(id);
@@ -27,9 +28,10 @@
   });
 
   const saveModule = async () => {
-    if (form !== undefined) ExtModuleStorage.add(form);
+    if (form !== undefined) ExtModuleStorage.update(form);
     updateContent();
     toast.success('Module saved');
+    open = false;
   };
   const deleteModule = async () => {
     if (form !== undefined) ExtModuleStorage.delete(id);
@@ -61,7 +63,7 @@
   <Button variant="ghost" size="icon" onclick={updateContent}>
     <CloudDownload />
   </Button>
-  <Dialog.Root>
+  <Dialog.Root bind:open>
     <Dialog.Trigger>
       {#snippet child({ props })}
         <Button variant="ghost" size="icon" {...props}>

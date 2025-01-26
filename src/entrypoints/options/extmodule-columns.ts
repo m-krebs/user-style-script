@@ -24,7 +24,7 @@ export const columns: ColumnDef<ExtModule>[] = [
           const module = await ExtModuleStorage.get(row.original.id);
           if (module == undefined) return;
           module.autoUpdate = !module.autoUpdate;
-          ExtModuleStorage.add(module)
+          ExtModuleStorage.update(module)
         }
       })
     }

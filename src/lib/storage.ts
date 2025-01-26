@@ -1,11 +1,4 @@
-import { ExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
-import { WxtStorageItem } from "wxt/storage";
-
-export const defineRuleset = class {
-	constructor(uuid: string) {
-		this.item = storage.defineItem<RulesetContent>(`local:${uuid}`, {})
-	}
-}
+import { ExtModule, NoIDExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
 
 export const RulesetStorage = class {
 	static item = storage.defineItem<Ruleset[]>('local:rulesets', {
@@ -36,6 +29,7 @@ export const RulesetStorage = class {
 	}
 
 	static async update(ruleset: Ruleset) {
+		console.log("ToUpdate: ", ruleset)
 		let rules: Ruleset[] = await RulesetStorage.item.getValue() as Ruleset[];
 
 		const index = rules.findIndex(rule => rule.id == ruleset.id)
@@ -67,7 +61,6 @@ export const ExtModuleStorage = class {
 	static item = storage.defineItem<ExtModule[]>('local:modules', {
 		defaultValue: [{
 			id: "30953483948932",
-			content: "alert('asdf')",
 			source: "https://example.com",
 			hash: "asdjfkasjdfljdsk",
 			name: "jnotquery",
@@ -77,17 +70,30 @@ export const ExtModuleStorage = class {
 
 	static watch(callback: (changedValue: ExtModule[]) => void) { return ExtModuleStorage.item.watch(callback) }
 
-	static async add(ruleset: ExtModule) {
-		let rules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
+	static async add(module: NoIDExtModule) {
+		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
 
-		const index = rules.findIndex(rule => rule.id == ruleset.id)
-		if (index == -1) {
-			rules.push(ruleset)
-		} else {
-			rules[index] = ruleset
+		let uuid = crypto.randomUUID();
+		while (modules.find((module) => module.id === uuid)) {
+			uuid = crypto.randomUUID()
 		}
 
-		ExtModuleStorage.item.setValue(rules)
+		modules.push({ ...module, id: uuid })
+
+		ExtModuleStorage.item.setValue(modules)
+	}
+
+	static async update(module: ExtModule) {
+		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
+
+		const index = modules.findIndex(rule => rule.id == module.id)
+		if (index == -1) {
+			modules.push(module)
+		} else {
+			modules[index] = module
+		}
+
+		ExtModuleStorage.item.setValue(modules)
 	}
 
 	static async get(id: string) {

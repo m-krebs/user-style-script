@@ -29,11 +29,12 @@ export const ExtModuleSchema = z.object({
 	name: z.string(),
 	source: z.string().url(),
 	hash: z.string(),
-	content: z.string(),
 	autoUpdate: z.boolean()
 })
 
+export const NoIDExtModuleSchema = ExtModuleSchema.omit({ id: true })
 
+export type NoIDExtModule = z.infer<typeof NoIDExtModuleSchema>;
 export type ExtModule = z.infer<typeof ExtModuleSchema>;
 
 export const RulesetContentSchema = z.object({

@@ -5,15 +5,34 @@
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
   import DataTable from '$lib/components/data-table.svelte';
   import Separator from '$lib/components/ui/separator/separator.svelte';
-  import type { ExtModule } from '$lib/schema';
+  import type { NoIDExtModule, ExtModule } from '$lib/schema';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { PlusCircle } from 'lucide-svelte';
+  import { CloudDownload, LoaderCircle, PlusCircle, Save } from 'lucide-svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { Label } from '$lib/components/ui/label';
+  import { Input } from '$lib/components/ui/input';
+  import { Switch } from '$lib/components/ui/switch';
 
   let data: ExtModule[] = $state([]);
 
   ExtModuleStorage.watch((changed) => {
     data = changed;
   });
+
+  let moduleForm: NoIDExtModule = $state({
+    name: '',
+    source: '',
+    autoUpdate: false,
+    hash: '',
+  });
+
+  let open = $state(false);
+
+  const createModule = () => {
+    ExtModuleStorage.add(moduleForm);
+
+    open = false;
+  };
 
   onMount(async () => {
     data = await ExtModuleStorage.getAll();
@@ -38,8 +57,43 @@
   </div>
   <Separator />
 
-  <Button href="" class="my-2 w-full">
-    Create new<PlusCircle />
-  </Button>
+  <Dialog.Root bind:open>
+    <Dialog.Trigger>
+      {#snippet child({ props })}
+        <Button class="my-2 w-full" {...props}>
+          Create new<PlusCircle />
+        </Button>
+      {/snippet}
+    </Dialog.Trigger>
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.Title>Add new module</Dialog.Title>
+      </Dialog.Header>
+      <div class="flex flex-col gap-2 pt-3">
+        <Label for="name">Name</Label>
+        <Input
+          type="text"
+          placeholder="Name"
+          id="name"
+          bind:value={moduleForm!.name}
+        />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <Label for="source">Source</Label>
+        <Input
+          type="text"
+          placeholder="Source"
+          id="source"
+          bind:value={moduleForm!.source}
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label for="autoupdate">Auto Update</Label>
+        <Switch id="autoupdate" bind:checked={moduleForm!.autoUpdate} />
+      </div>
+      <Button class="w-full" onclick={createModule}><PlusCircle />Create</Button
+      >
+    </Dialog.Content>
+  </Dialog.Root>
   <DataTable bind:data {columns} />
 </div>
