@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      sass-embedded:
-        specifier: ^1.83.4
-        version: 1.83.4
     devDependencies:
       '@tanstack/table-core':
         specifier: ^8.20.5
@@ -57,6 +53,12 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.9
         version: 0.6.9(prettier-plugin-svelte@3.3.2(prettier@3.4.2)(svelte@5.11.2))(prettier@3.4.2)
+      runed:
+        specifier: ^0.23.1
+        version: 0.23.1(svelte@5.11.2)
+      sass-embedded:
+        specifier: ^1.83.4
+        version: 1.83.4
       svelte:
         specifier: ^5.1.16
         version: 5.11.2
@@ -2484,6 +2486,11 @@ packages:
 
   runed@0.22.0:
     resolution: {integrity: sha512-ZWVXWhOr0P5xdNgtviz6D1ivLUDWKLCbeC5SUEJ3zBkqLReVqWHenFxMNFeFaiC5bfxhFxyxzyzB+98uYFtwdA==}
+    peerDependencies:
+      svelte: ^5.7.0
+
+  runed@0.23.1:
+    resolution: {integrity: sha512-h1ZDmin0LBoSMEZxvHOJbCWsUBz4099cjI+/rQ4FZystgOq294s5Rh+OEeu9HIObc8XQQEya23eAhJeal0VBuA==}
     peerDependencies:
       svelte: ^5.7.0
 
@@ -5422,6 +5429,11 @@ snapshots:
       svelte: 5.11.2
 
   runed@0.22.0(svelte@5.11.2):
+    dependencies:
+      esm-env: 1.2.1
+      svelte: 5.11.2
+
+  runed@0.23.1(svelte@5.11.2):
     dependencies:
       esm-env: 1.2.1
       svelte: 5.11.2

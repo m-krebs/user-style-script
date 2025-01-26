@@ -6,6 +6,7 @@
   // @ts-ignore
   import { initVimMode } from 'monaco-vim';
   import { cn } from '$lib/utils';
+  import { useDebounce } from 'runed';
 
   let vimMode = $state(false);
 
@@ -17,12 +18,14 @@
     language = 'javascript',
     vim = undefined,
     value = $bindable(undefined),
+    valueUpdated,
   }: {
     class?: string;
     placeholder?: string;
     language?: EditorLanguage;
     vim?: boolean;
     value?: string;
+    valueUpdated: any;
   } = $props();
 
   self.MonacoEnvironment = {
@@ -39,6 +42,10 @@
 
   let monacoContainer: HTMLElement;
   let vimStatus: HTMLElement = $state(document.createElement('div'));
+
+  const debouncedValueUpdate = useDebounce((value: string) => {
+    valueUpdated(value);
+  }, 400);
 
   onMount(() => {
     if (vim === undefined) {
@@ -58,8 +65,8 @@
       initVimMode(editor, vimStatus);
     }
 
-    editor.onEndUpdate((event) => {
-      console.log(editor.getValue());
+    editor.onEndUpdate(() => {
+      debouncedValueUpdate(editor.getValue());
     });
   });
 </script>

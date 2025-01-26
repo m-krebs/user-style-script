@@ -8,12 +8,7 @@
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
   import Input from '$lib/components/ui/input/input.svelte';
-  import {
-    RulesetContent,
-    type ExtModule,
-    type NoIdRuleset,
-    type Ruleset,
-  } from '$lib/schema';
+  import { type ExtModule, type NoIdRuleset, type Ruleset } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
 
   let { ruleset }: { ruleset?: Ruleset } = $props();
@@ -44,12 +39,7 @@
 
   let moduleLength = $derived(formRuleset?.modules.length);
 
-  const rulesetContent =
-    'id' in formRuleset
-      ? await storage
-          .defineItem<RulesetContent>(`local:${formRuleset?.id}`, {})
-          .getValue()
-      : '';
+  const rulesetContent = '';
 </script>
 
 <div class="mt-2 flex gap-2">

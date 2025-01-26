@@ -3,7 +3,7 @@
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import { RulesetStorage } from '$lib/storage';
-  import Ruleset from './Ruleset.svelte';
+  import RulesetEdit from './RulesetEdit.svelte';
 
   let { params } = $props();
 
@@ -30,6 +30,6 @@
   <Separator />
 
   {#await ruleset then ruleset}
-    <Ruleset {ruleset} />
+    <RulesetEdit {ruleset} />
   {/await}
 </div>

@@ -8,23 +8,12 @@
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
   import Input from '$lib/components/ui/input/input.svelte';
-  import {
-    RulesetContent,
-    type ExtModule,
-    type NoIdRuleset,
-    type Ruleset,
-  } from '$lib/schema';
-  import { ExtModuleStorage } from '$lib/storage';
+  import type { RulesetContent, ExtModule, Ruleset } from '$lib/schema';
+  import { ExtModuleStorage, RulesetStorage } from '$lib/storage';
 
   let { ruleset }: { ruleset: Ruleset } = $props();
-
   let formRuleset: Ruleset = $state(ruleset);
-
   let modules: ExtModule[] = $state([]);
-
-  onMount(async () => {
-    modules = await ExtModuleStorage.getAll();
-  });
 
   ExtModuleStorage.watch((newModuleList) => {
     modules = newModuleList;
@@ -33,12 +22,37 @@
   let open = $state(false);
   let ref = $state<HTMLButtonElement>(null!);
 
-  let moduleLength = $derived(formRuleset?.modules.length);
+  console.log(formRuleset);
 
-  let rulesetContent = async () =>
-    await storage
-      .defineItem<RulesetContent>(`local:${formRuleset?.id}`, {})
-      .getValue();
+  let modulesSelectedLength = $derived(formRuleset?.modules.length);
+
+  let rulesetContent = storage.defineItem<RulesetContent>(
+    `local:${formRuleset?.id}`,
+    {},
+  );
+
+  let jsValue = $state('');
+  let cssValue = $state('');
+
+  async function updateRuleset() {
+    console.log(typeof formRuleset.modules, formRuleset.modules);
+
+    await RulesetStorage.update({
+      ...formRuleset,
+      updated: Date.now(),
+      modules: $state.snapshot(formRuleset.modules),
+    });
+
+    console.log(jsValue, cssValue);
+    await rulesetContent.setValue({ js: jsValue, css: cssValue });
+  }
+
+  onMount(async () => {
+    jsValue = (await rulesetContent.getValue()).js;
+    cssValue = (await rulesetContent.getValue()).css;
+
+    console.log(rulesetContent.getValue());
+  });
 </script>
 
 <div class="mt-2 flex gap-2">
@@ -59,12 +73,14 @@
           role="combobox"
           aria-expanded={open}
         >
-          {#if moduleLength == 0}
+          {#if modulesSelectedLength == 0}
             {'Select modules...'}
-          {:else if formRuleset?.modules.length == 1}
-            {modules.find((item) => item.id === formRuleset?.modules[0]).name}
+          {:else if modulesSelectedLength == 1}
+            {#await ExtModuleStorage.getAll() then modules}
+              {modules.find((item) => item.id === formRuleset?.modules[0]).name}
+            {/await}
           {:else}
-            {moduleLength}{' selected'}
+            {modulesSelectedLength}{' selected'}
           {/if}
           <ChevronsUpDown class="opacity-50" />
         </Button>
@@ -75,46 +91,57 @@
         <Command.Input placeholder="Search external modules..." />
         <Command.List>
           <Command.Empty>No module found.</Command.Empty>
-          {#each modules as module}
-            <Command.Item
-              onSelect={() => {
-                console.log(module.id);
-                const index = formRuleset?.modules.findIndex(
-                  (item) => item === module.id,
-                );
-
-                console.log(index);
-
-                if (index !== -1 && index !== undefined) {
-                  formRuleset?.modules.splice(index, 1);
-                } else {
-                  formRuleset?.modules.push(module.id);
-                }
-              }}
-            >
-              <Check
-                class={cn(
-                  !formRuleset?.modules.find((item) => item === module.id) &&
-                    'text-transparent',
-                )}
-              />
-              {module.name}
-            </Command.Item>
-          {/each}
+          {#await ExtModuleStorage.getAll() then modules}
+            {#each modules as module}
+              <Command.Item
+                onSelect={() => {
+                  console.log(module.id);
+                  const index = formRuleset?.modules.findIndex(
+                    (item) => item === module.id,
+                  );
+                  if (index !== -1 && index !== undefined) {
+                    formRuleset?.modules.splice(index, 1);
+                  } else {
+                    formRuleset?.modules.push(module.id);
+                  }
+                }}
+              >
+                <Check
+                  class={cn(
+                    !formRuleset?.modules.find((item) => item === module.id) &&
+                      'text-transparent',
+                  )}
+                />
+                {module.name}
+              </Command.Item>
+            {/each}
+          {/await}
         </Command.List>
       </Command.Root>
     </Popover.Content>
   </Popover.Root>
-  <Button class="ml-auto">
+  <Button
+    class="ml-auto"
+    onclick={() => {
+      updateRuleset();
+    }}
+  >
     <Save />Save
   </Button>
 </div>
 <div class="mt-2 flex h-full">
-  {#await rulesetContent}
-    Loading...
-  {:then data}
-    {data.js}
+  {#await rulesetContent.getValue() then data}
+    <Editor
+      class="w-full"
+      value={data?.js}
+      valueUpdated={(value: string) => (jsValue = value)}
+    />
+    <Editor
+      class="w-full"
+      language="scss"
+      placeholder="Type SCSS/CSS here"
+      value={data?.css}
+      valueUpdated={(value: string) => (cssValue = value)}
+    />
   {/await}
-  <Editor class="w-full" />
-  <Editor class="w-full" language="scss" placeholder="Type SCSS/CSS here" />
 </div>
