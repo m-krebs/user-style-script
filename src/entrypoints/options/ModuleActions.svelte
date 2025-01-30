@@ -35,7 +35,7 @@
   };
   const deleteModule = async () => {
     if (form !== undefined) ExtModuleStorage.delete(id);
-    toast.success('Module deleted!');
+    toast.success(`Deleted module ${form!.name}`);
   };
 
   async function fetchScript(url: any) {
@@ -48,20 +48,28 @@
   let refreshFinished = $state(true);
   const updateContent = async () => {
     refreshFinished = false;
-    try {
-      const text = await fetchScript(form!.source);
-      form!.content = `${text}`;
-      toast.success('Module content updated');
-    } catch (error) {
-      toast.error(`Failed to fetch module`);
-    }
+    ExtModuleStorage.updateContent(id)
+      .then((result) => {
+        if (result.success == false) return toast.info(result.message);
+        toast.success(result.message);
+      })
+      .catch((error) => toast.error(error.message));
     refreshFinished = true;
   };
 </script>
 
 {#await ExtModuleStorage.get(id) then module}
-  <Button variant="ghost" size="icon" onclick={updateContent}>
-    <CloudDownload />
+  <Button
+    variant="ghost"
+    size="icon"
+    onclick={updateContent}
+    disabled={!refreshFinished}
+  >
+    {#if !refreshFinished}
+      <LoaderCircle class="animate-spin" />
+    {:else}
+      <CloudDownload />
+    {/if}
   </Button>
   <Dialog.Root bind:open>
     <Dialog.Trigger>

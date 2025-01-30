@@ -43,7 +43,7 @@
 </script>
 
 <ModeWatcher />
-<Toaster richColors />
+<Toaster richColors expand />
 {#if !isUserScriptsAvailable()}
   <div
     class="mx-auto flex flex-col items-center justify-center gap-3 p-5 align-middle text-xl text-orange-500"

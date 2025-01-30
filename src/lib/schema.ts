@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { nullable, z } from 'zod';
 
 export const SettingsSchema = z.object({
 	editor: z.object({
@@ -28,14 +28,21 @@ export const ExtModuleSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	source: z.string().url(),
-	hash: z.string(),
-	autoUpdate: z.boolean()
+	autoUpdate: z.boolean(),
 })
-
 export const NoIDExtModuleSchema = ExtModuleSchema.omit({ id: true })
+export const ExtModuleObjSchema = z.object({
+	content: z.string(),
+	identifier: z.object({
+		contentLength: z.string().nullable(),
+		etag: z.string().nullable(),
+		hash: z.number(),
+	})
+})
 
 export type NoIDExtModule = z.infer<typeof NoIDExtModuleSchema>;
 export type ExtModule = z.infer<typeof ExtModuleSchema>;
+export type ExtModuleObj = z.infer<typeof ExtModuleObjSchema>;
 
 export const RulesetContentSchema = z.object({
 	js: z.string(),

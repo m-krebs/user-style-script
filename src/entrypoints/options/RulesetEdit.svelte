@@ -10,6 +10,7 @@
   import Input from '$lib/components/ui/input/input.svelte';
   import type { RulesetContent, ExtModule, Ruleset } from '$lib/schema';
   import { ExtModuleStorage, RulesetStorage } from '$lib/storage';
+  import { toast } from 'svelte-sonner';
 
   let { ruleset }: { ruleset: Ruleset } = $props();
   let formRuleset: Ruleset = $state(ruleset);
@@ -45,6 +46,8 @@
 
     console.log(jsValue, cssValue);
     await rulesetContent.setValue({ js: jsValue, css: cssValue });
+
+    toast.success('Updated ruleset');
   }
 
   onMount(async () => {

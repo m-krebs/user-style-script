@@ -7,6 +7,7 @@ import { RulesetStorage } from "$lib/storage";
 import { push } from 'svelte-spa-router';
 import { Ruleset } from "$lib/schema";
 import { toast } from 'svelte-sonner'
+import ToastHTML from '$lib/components/ToastHTML.svelte'
 
 export const columns: ColumnDef<Ruleset>[] = [
   {
@@ -23,9 +24,13 @@ export const columns: ColumnDef<Ruleset>[] = [
         onCheckedChange: async () => {
           const ruleset = await RulesetStorage.get(row.original.id);
           if (ruleset == undefined) return;
-          toast(row.original.active ? `Disabled ${row.original.name}` : `Enabled ${row.original.name}`)
           ruleset.active = !ruleset.active;
-          RulesetStorage.update(ruleset)
+          await RulesetStorage.update(ruleset)
+          if (!ruleset.active) {
+            toast(ToastHTML, { componentProps: { message: `${row.original.name} - <b>Disabled</b>` } })
+          } else {
+            toast(ToastHTML, { componentProps: { message: `${row.original.name} - <b>Enabled</b>` } })
+          }
         }
       })
     }

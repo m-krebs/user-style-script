@@ -7,13 +7,15 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import type { NoIDExtModule, ExtModule } from '$lib/schema';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { CloudDownload, LoaderCircle, PlusCircle, Save } from 'lucide-svelte';
+  import { PlusCircle } from 'lucide-svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { Label } from '$lib/components/ui/label';
   import { Input } from '$lib/components/ui/input';
   import { Switch } from '$lib/components/ui/switch';
+  import { toast } from 'svelte-sonner';
 
   let data: ExtModule[] = $state([]);
+  let open = $state(false);
 
   ExtModuleStorage.watch((changed) => {
     data = changed;
@@ -23,16 +25,23 @@
     name: '',
     source: '',
     autoUpdate: false,
-    hash: '',
   });
 
-  let open = $state(false);
+  function moduleFormReset() {
+    moduleForm = {
+      name: '',
+      source: '',
+      autoUpdate: false,
+    };
+  }
 
-  const createModule = () => {
+  function createModule() {
     ExtModuleStorage.add(moduleForm);
 
     open = false;
-  };
+    moduleFormReset();
+    toast.success(`Added Module ${moduleForm.name}`);
+  }
 
   onMount(async () => {
     data = await ExtModuleStorage.getAll();

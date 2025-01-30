@@ -1,4 +1,6 @@
-import { ExtModule, NoIDExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
+import { ExtModule, ExtModuleObj, NoIDExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
+import { hashCode } from "$lib/utils";
+import { storage } from "wxt/storage"
 
 export const RulesetStorage = class {
 	static item = storage.defineItem<Ruleset[]>('local:rulesets', {
@@ -29,7 +31,6 @@ export const RulesetStorage = class {
 	}
 
 	static async update(ruleset: Ruleset) {
-		console.log("ToUpdate: ", ruleset)
 		let rules: Ruleset[] = await RulesetStorage.item.getValue() as Ruleset[];
 
 		const index = rules.findIndex(rule => rule.id == ruleset.id)
@@ -39,7 +40,7 @@ export const RulesetStorage = class {
 			rules[index] = ruleset
 		}
 
-		RulesetStorage.item.setValue(rules)
+		RulesetStorage.item.setValue(rules).then(result => Promise.resolve(true))
 	}
 
 	static async get(id: string) {
@@ -60,13 +61,12 @@ export const RulesetStorage = class {
 export const ExtModuleStorage = class {
 	static item = storage.defineItem<ExtModule[]>('local:modules', {
 		defaultValue: [{
-			id: "30953483948932",
+			id: "394u39f93999349i39",
 			source: "https://example.com",
-			hash: "asdjfkasjdfljdsk",
 			name: "jnotquery",
 			autoUpdate: true
 		}]
-	})
+	});
 
 	static watch(callback: (changedValue: ExtModule[]) => void) { return ExtModuleStorage.item.watch(callback) }
 
@@ -78,15 +78,31 @@ export const ExtModuleStorage = class {
 			uuid = crypto.randomUUID()
 		}
 
-		modules.push({ ...module, id: uuid })
+		modules.push({ ...module, id: uuid });
 
-		ExtModuleStorage.item.setValue(modules)
+		ExtModuleStorage.item.setValue(modules);
+
+		const response = await fetch(module.source)
+
+		const eTag = response.headers.get('ETag');
+		const contentLength = response.headers.get('Content-Length')
+		const content = await response.text();
+		const hash = hashCode(content);
+
+		storage.defineItem<ExtModuleObj>(`local:${uuid}`).setValue({
+			content: content,
+			identifier: {
+				contentLength: contentLength || null,
+				etag: eTag || null,
+				hash: hash,
+			}
+		});
 	}
 
 	static async update(module: ExtModule) {
 		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
 
-		const index = modules.findIndex(rule => rule.id == module.id)
+		const index = modules.findIndex(m => m.id == module.id)
 		if (index == -1) {
 			modules.push(module)
 		} else {
@@ -94,6 +110,45 @@ export const ExtModuleStorage = class {
 		}
 
 		ExtModuleStorage.item.setValue(modules)
+	}
+
+	static async updateContent(id: string) {
+		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
+
+		let module = modules.find(m => m.id === id)
+		if (!module) throw new Error("External Module does not exist!");
+
+		let moduleObject: ExtModuleObj | null = await storage.getItem(`local:${id}`)
+		if (moduleObject === null) throw new Error("Could not find external module!");
+
+		const responseHead = await fetch(module.source, { method: 'HEAD' });
+		const eTag = responseHead.headers.get('ETag');
+		const contentLength = responseHead.headers.get('Content-Length');
+
+		console.log(moduleObject)
+		if (eTag === moduleObject.identifier.etag
+			|| contentLength === moduleObject.identifier.contentLength)
+			return { success: false, message: "Content already up-to-date" };
+
+		const response = await fetch(module.source);
+		const content = await response.text();
+		const hash = hashCode(content);
+
+		if (hashCode(content) === moduleObject.identifier.hash)
+			return Promise.resolve({ success: false, message: "Content already up-to-date" })
+
+		moduleObject.content = content;
+		moduleObject.identifier = {
+			contentLength: contentLength,
+			etag: eTag,
+			hash: hash,
+		}
+
+		await storage.setItem(`local:${id}`, moduleObject)
+			.then(result => Promise
+				.resolve({ successs: true, message: "Content updated" }))
+			.catch(error => Promise
+				.reject(new Error("Failed updating module content: " + error.message)))
 	}
 
 	static async get(id: string) {
