@@ -19,134 +19,140 @@
   let { id } = $props();
 
   let open = $state(false);
-  let form: ExtModule | undefined = $state();
-  onMount(async () => {
-    form = await ExtModuleStorage.get(id);
-  });
-  ExtModuleStorage.watch((newModule) => {
-    form = newModule.filter((m) => m.id == id)[0];
-  });
-
-  const saveModule = async () => {
-    if (form !== undefined) ExtModuleStorage.update(form);
-    updateContent();
-    toast.success('Module saved');
-    open = false;
-  };
-  const deleteModule = async () => {
-    if (form !== undefined) ExtModuleStorage.delete(id);
-    toast.success(`Deleted module ${form!.name}`);
-  };
-
-  async function fetchScript(url: any) {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch module ${response.statusText}`);
-    }
-    return await response.text();
-  }
+  let module: ExtModule | undefined = $state();
   let refreshFinished = $state(true);
-  const updateContent = async () => {
+
+  onMount(async () => {
+    module = await ExtModuleStorage.get(id);
+  });
+
+  ExtModuleStorage.watch((newModule) => {
+    module = newModule.filter((m) => m.id == id)[0];
+  });
+
+  async function saveModule(mod: ExtModule) {
+    try {
+      const result = await ExtModuleStorage.update(mod);
+      if (result.success) toast.success(result.message);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      open = false;
+    }
+  }
+  async function deleteModule(module: ExtModule) {
+    try {
+      const result = await ExtModuleStorage.delete(id);
+      if (result.success) toast.success(`Deleted module ${module!.name}`);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
+  async function updateContent() {
     refreshFinished = false;
-    ExtModuleStorage.updateContent(id)
-      .then((result) => {
-        if (result.success == false) return toast.info(result.message);
-        toast.success(result.message);
-      })
-      .catch((error) => toast.error(error.message));
+    try {
+      const result = await ExtModuleStorage.updateContent(id);
+      if (result.success == false) toast.info(result.message);
+      else toast.success(result.message);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
     refreshFinished = true;
-  };
+  }
 </script>
 
-{#await ExtModuleStorage.get(id) then module}
-  <Button
-    variant="ghost"
-    size="icon"
-    onclick={updateContent}
-    disabled={!refreshFinished}
-  >
-    {#if !refreshFinished}
-      <LoaderCircle class="animate-spin" />
-    {:else}
-      <CloudDownload />
-    {/if}
-  </Button>
-  <Dialog.Root bind:open>
-    <Dialog.Trigger>
-      {#snippet child({ props })}
-        <Button variant="ghost" size="icon" {...props}>
-          <Pencil />
-        </Button>
-      {/snippet}
-    </Dialog.Trigger>
-    <Dialog.Content>
-      <Dialog.Header>
-        <Dialog.Title>Edit Module</Dialog.Title>
-      </Dialog.Header>
-      <div class="flex flex-col gap-2 pt-3">
-        <Label for="name">Name</Label>
-        <Input
-          type="text"
-          placeholder="Name"
-          id="name"
-          bind:value={form!.name}
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label for="source">Source</Label>
-        <Input
-          type="text"
-          placeholder="Source"
-          id="source"
-          bind:value={form!.source}
-        />
-      </div>
-      <div class="flex flex-col gap-2">
-        <Label for="autoupdate">Auto Update</Label>
-        <Switch id="autoupdate" bind:checked={form!.autoUpdate} />
-      </div>
-      <div class="flex gap-3">
-        <Button
-          variant="outline"
-          class="w-full"
-          onclick={updateContent}
-          disabled={!refreshFinished}
-        >
-          {#if !refreshFinished}
-            <LoaderCircle class="animate-spin" />
-          {/if}
-          <CloudDownload /> Manual Refresh
-        </Button>
-        <Button class="w-full" onclick={saveModule}><Save />Save</Button>
-      </div>
-    </Dialog.Content>
-  </Dialog.Root>
+<Button
+  variant="ghost"
+  size="icon"
+  onclick={updateContent}
+  disabled={!refreshFinished}
+>
+  {#if !refreshFinished}
+    <LoaderCircle class="animate-spin" />
+  {:else}
+    <CloudDownload />
+  {/if}
+</Button>
+<Dialog.Root bind:open>
+  <Dialog.Trigger>
+    {#snippet child({ props })}
+      <Button variant="ghost" size="icon" {...props}>
+        <Pencil />
+      </Button>
+    {/snippet}
+  </Dialog.Trigger>
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.Title>Edit Module</Dialog.Title>
+    </Dialog.Header>
+    <div class="flex flex-col gap-2 pt-3">
+      <Label for="name">Name</Label>
+      <Input
+        type="text"
+        placeholder="Name"
+        id="name"
+        bind:value={module!.name}
+      />
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <Label for="source">Source</Label>
+      <Input
+        type="text"
+        placeholder="Source"
+        id="source"
+        bind:value={module!.source}
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <Label for="autoupdate">Auto Update</Label>
+      <Switch id="autoupdate" bind:checked={module!.autoUpdate} />
+    </div>
+    <div class="flex gap-3">
+      <Button
+        variant="outline"
+        class="w-full"
+        onclick={updateContent}
+        disabled={!refreshFinished}
+      >
+        {#if !refreshFinished}
+          <LoaderCircle class="animate-spin" />
+        {/if}
+        <CloudDownload /> Manual Refresh
+      </Button>
+      <Button class="w-full" onclick={() => saveModule(module as ExtModule)}
+        ><Save />Save</Button
+      >
+    </div>
+  </Dialog.Content>
+</Dialog.Root>
 
-  <AlertDialog.Root>
-    <AlertDialog.Content>
-      <AlertDialog.Header>
-        <AlertDialog.Title>
-          Delete Module <i>{module!.name}</i>
-        </AlertDialog.Title>
-        <AlertDialog.Description>
-          Are you sure? This will permanently delete the module.
-        </AlertDialog.Description>
-      </AlertDialog.Header>
-      <AlertDialog.Footer>
-        <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-        <AlertDialog.Action>
-          {#snippet child()}
-            <Button variant="destructive" onclick={deleteModule}>Delete</Button>
-          {/snippet}
-        </AlertDialog.Action>
-      </AlertDialog.Footer>
-    </AlertDialog.Content>
-    <AlertDialog.Trigger>
-      {#snippet child({ props })}
-        <Button variant="ghost" size="icon" class="text-red-600" {...props}>
-          <Trash />
-        </Button>
-      {/snippet}
-    </AlertDialog.Trigger>
-  </AlertDialog.Root>
-{/await}
+<AlertDialog.Root>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Title>
+        Delete Module <i>{module!.name}</i>
+      </AlertDialog.Title>
+      <AlertDialog.Description>
+        Are you sure? This will permanently delete the module.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Action>
+        {#snippet child()}
+          <Button
+            variant="destructive"
+            onclick={() => deleteModule(module as ExtModule)}>Delete</Button
+          >
+        {/snippet}
+      </AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+  <AlertDialog.Trigger>
+    {#snippet child({ props })}
+      <Button variant="ghost" size="icon" class="text-red-600" {...props}>
+        <Trash />
+      </Button>
+    {/snippet}
+  </AlertDialog.Trigger>
+</AlertDialog.Root>

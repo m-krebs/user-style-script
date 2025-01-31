@@ -109,7 +109,12 @@ export const ExtModuleStorage = class {
 			modules[index] = module
 		}
 
-		ExtModuleStorage.item.setValue(modules)
+		try {
+			const result = await ExtModuleStorage.item.setValue(modules)
+			return { success: true, message: "Saved module" }
+		} catch (error) {
+			throw Error('Failed to update external module')
+		}
 	}
 
 	static async updateContent(id: string) {
@@ -135,7 +140,7 @@ export const ExtModuleStorage = class {
 		const hash = hashCode(content);
 
 		if (hashCode(content) === moduleObject.identifier.hash)
-			return Promise.resolve({ success: false, message: "Content already up-to-date" })
+			return { success: false, message: "Content already up-to-date" }
 
 		moduleObject.content = content;
 		moduleObject.identifier = {
@@ -144,15 +149,17 @@ export const ExtModuleStorage = class {
 			hash: hash,
 		}
 
-		await storage.setItem(`local:${id}`, moduleObject)
-			.then(result => Promise
-				.resolve({ successs: true, message: "Content updated" }))
-			.catch(error => Promise
-				.reject(new Error("Failed updating module content: " + error.message)))
+		try {
+			await storage.setItem(`local:${id}`, moduleObject);
+			return { success: true, message: "Content updated" }
+		} catch (error) {
+			throw Error(`Failed to update module content: ${error}`)
+		}
 	}
 
 	static async get(id: string) {
-		return await ExtModuleStorage.item.getValue().then(ruleset => ruleset.find(r => r.id === id))
+		const ruleset = await ExtModuleStorage.item.getValue()
+		return ruleset.find(r => r.id === id)
 	}
 
 	static async getAll() {
@@ -162,6 +169,11 @@ export const ExtModuleStorage = class {
 	static async delete(id: string) {
 		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
 
-		ExtModuleStorage.item.setValue(modules.filter(rule => rule.id !== id))
+		try {
+			await ExtModuleStorage.item.setValue(modules.filter(rule => rule.id !== id))
+			return { success: true, message: "Successfully deleted module" }
+		} catch (error) {
+			throw Error(`Failed to delete module: ${error}`)
+		}
 	}
 }
