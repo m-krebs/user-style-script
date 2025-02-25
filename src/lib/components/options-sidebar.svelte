@@ -1,6 +1,10 @@
 <script lang="ts">
   import * as Sidebar from '$lib/components/ui/sidebar/index';
   import { Home, Puzzle, Settings } from 'lucide-svelte';
+
+  const close = () => {
+    // TODO: close sidebar on small screens
+  };
 </script>
 
 <Sidebar.Root collapsible="icon">
@@ -9,7 +13,8 @@
       <Sidebar.MenuItem>
         <Sidebar.MenuButton>
           {#snippet child({ props })}
-            <a href="#/" {...props}><Home /><span>Home</span></a>
+            <a href="#/" {...props} onclick={close}><Home /><span>Home</span></a
+            >
           {/snippet}
         </Sidebar.MenuButton>
       </Sidebar.MenuItem>

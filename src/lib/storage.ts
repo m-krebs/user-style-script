@@ -1,5 +1,6 @@
 import { ExtModule, ExtModuleObj, NoIDExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
 import { hashCode } from "$lib/utils";
+import { log } from "console";
 import { storage } from "wxt/storage"
 
 export const RulesetStorage = class {
@@ -82,11 +83,26 @@ export const ExtModuleStorage = class {
 
 		ExtModuleStorage.item.setValue(modules);
 
-		const response = await fetch(module.source)
+		let response = null;
+		try {
+			response = await fetch(module.source)
+			if (!response.ok) throw new Error(response.statusText)
+		} catch (error) {
+			storage.defineItem<ExtModuleObj>(`local:${uuid}`).setValue({
+				content: '',
+				identifier: {
+					contentLength: null,
+					etag: null,
+					hash: null,
+				}
+			});
+			if (error instanceof Error)
+				throw new Error(error.message)
+		}
 
-		const eTag = response.headers.get('ETag');
-		const contentLength = response.headers.get('Content-Length')
-		const content = await response.text();
+		const eTag = response!.headers.get('ETag');
+		const contentLength = response!.headers.get('Content-Length')
+		const content = await response!.text();
 		const hash = hashCode(content);
 
 		storage.defineItem<ExtModuleObj>(`local:${uuid}`).setValue({
@@ -94,7 +110,7 @@ export const ExtModuleStorage = class {
 			identifier: {
 				contentLength: contentLength || null,
 				etag: eTag || null,
-				hash: hash,
+				hash: hash || null,
 			}
 		});
 	}
@@ -110,7 +126,7 @@ export const ExtModuleStorage = class {
 		}
 
 		try {
-			const result = await ExtModuleStorage.item.setValue(modules)
+			await ExtModuleStorage.item.setValue(modules)
 			return { success: true, message: "Saved module" }
 		} catch (error) {
 			throw Error('Failed to update external module')
@@ -121,10 +137,11 @@ export const ExtModuleStorage = class {
 		let modules: ExtModule[] = await ExtModuleStorage.item.getValue() as ExtModule[];
 
 		let module = modules.find(m => m.id === id)
-		if (!module) throw new Error("External Module does not exist!");
+		if (!module) throw new Error("External module does not exist");
 
 		let moduleObject: ExtModuleObj | null = await storage.getItem(`local:${id}`)
-		if (moduleObject === null) throw new Error("Could not find external module!");
+		// TODO: throw different error when fetching fails
+		if (moduleObject === null) throw new Error("Could not find external module");
 
 		const responseHead = await fetch(module.source, { method: 'HEAD' });
 		const eTag = responseHead.headers.get('ETag');
@@ -133,14 +150,14 @@ export const ExtModuleStorage = class {
 		console.log(moduleObject)
 		if (eTag === moduleObject.identifier.etag
 			|| contentLength === moduleObject.identifier.contentLength)
-			return { success: false, message: "Content already up-to-date" };
+			return { success: false, message: "Content up-to-date" };
 
 		const response = await fetch(module.source);
 		const content = await response.text();
 		const hash = hashCode(content);
 
 		if (hashCode(content) === moduleObject.identifier.hash)
-			return { success: false, message: "Content already up-to-date" }
+			return { success: false, message: "Content up-to-date" }
 
 		moduleObject.content = content;
 		moduleObject.identifier = {

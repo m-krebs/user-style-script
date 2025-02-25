@@ -3,7 +3,7 @@
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
 
   import Separator from '$lib/components/ui/separator/separator.svelte';
-  import Ruleset from './Ruleset.svelte';
+  import Ruleset from '../ruleset.svelte';
 </script>
 
 <div class="flex h-screen flex-col px-3">

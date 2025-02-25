@@ -61,7 +61,7 @@
 <div class="mt-2 flex gap-2">
   <Input
     type="text"
-    placeholder="Ruleset name"
+    placeholder="Name"
     class="basis-2/6"
     bind:value={formRuleset!.name}
   />
@@ -95,6 +95,9 @@
         <Command.List>
           <Command.Empty>No module found.</Command.Empty>
           {#await ExtModuleStorage.getAll() then modules}
+            {#if modules.length === 0}
+              <Command.Item disabled>No External Modules</Command.Item>
+            {/if}
             {#each modules as module}
               <Command.Item
                 onSelect={() => {

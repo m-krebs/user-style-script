@@ -21,7 +21,7 @@ type UserScriptOpts = {
 }
 
 export async function createUserScript(opts: UserScriptOpts) {
-	if (!isUserScriptsAvailable) return;
+	if (!isUserScriptsAvailable) throw new Error("UserScripts not available. Developer Mode is required!");
 
 	const existingScripts = await browser.userScripts.getScripts({ ids: [opts.id] });
 

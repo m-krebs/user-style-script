@@ -8,8 +8,14 @@
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
   import Input from '$lib/components/ui/input/input.svelte';
-  import { type ExtModule, type NoIdRuleset, type Ruleset } from '$lib/schema';
+  import {
+    UrlMatchPatternSchema,
+    type ExtModule,
+    type NoIdRuleset,
+    type Ruleset,
+  } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
+  import { toast } from 'svelte-sonner';
 
   let { ruleset }: { ruleset?: Ruleset } = $props();
 
@@ -40,16 +46,50 @@
   let moduleLength = $derived(formRuleset?.modules.length);
 
   const rulesetContent = '';
+
+  let urlInput: HTMLElement;
+
+  function validateUrlPattern() {
+    const urls = formRuleset?.urls.split(',');
+    const matches: string[] = [];
+    const excludeMatches: string[] = [];
+
+    const urlinput = document.getElementById('url-input');
+    try {
+      urls?.forEach((url) => {
+        url = url.trimStart();
+        if (url === '') return;
+        UrlMatchPatternSchema.parse(url);
+        url.startsWith('!')
+          ? excludeMatches.push(url.substring(1))
+          : matches.push(url);
+
+        urlinput!.classList.contains('border-red-600')
+          ? urlinput?.classList.remove('border-red-600')
+          : null;
+      });
+    } catch (error) {
+      urlinput!.classList.contains('border-red-600')
+        ? null
+        : urlinput?.classList.add('border-red-600');
+    }
+  }
 </script>
 
 <div class="mt-2 flex gap-2">
   <Input
     type="text"
-    placeholder="Ruleset name"
+    placeholder="Name"
     class="basis-2/6"
     bind:value={formRuleset!.name}
   />
-  <Input type="text" placeholder="URL pattern" bind:value={formRuleset!.urls} />
+  <Input
+    type="text"
+    placeholder="https://example.com/*,!https://example.com/not_here"
+    bind:value={formRuleset!.urls}
+    onfocusout={validateUrlPattern}
+    id="url-input"
+  />
   <Popover.Root bind:open>
     <Popover.Trigger bind:ref>
       {#snippet child({ props })}
@@ -75,7 +115,11 @@
       <Command.Root>
         <Command.Input placeholder="Search external modules..." />
         <Command.List>
-          <Command.Empty>No module found.</Command.Empty>
+          {#if modules.length == 0}
+            <Command.Item disabled>
+              <Check class="invisible" />No modules found.
+            </Command.Item>
+          {/if}
           {#each modules as module}
             <Command.Item
               onSelect={() => {

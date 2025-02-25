@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
-  import * as Dialog from '$lib/components/ui/dialog/index.js';
+  import * as Dialog from '$lib/components/ui/dialog/index';
   import {
     CloudDownload,
     LoaderCircle,
@@ -19,6 +19,7 @@
   let { id } = $props();
 
   let open = $state(false);
+  let dialogOpen = $state(false);
   let module: ExtModule | undefined = $state();
   let refreshFinished = $state(true);
 
@@ -83,7 +84,7 @@
   </Dialog.Trigger>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Edit Module</Dialog.Title>
+      <Dialog.Title>Edit module</Dialog.Title>
     </Dialog.Header>
     <div class="flex flex-col gap-2 pt-3">
       <Label for="name">Name</Label>
@@ -126,7 +127,7 @@
   </Dialog.Content>
 </Dialog.Root>
 
-<AlertDialog.Root>
+<AlertDialog.Root bind:open={dialogOpen}>
   <AlertDialog.Content>
     <AlertDialog.Header>
       <AlertDialog.Title>
@@ -142,7 +143,10 @@
         {#snippet child()}
           <Button
             variant="destructive"
-            onclick={() => deleteModule(module as ExtModule)}>Delete</Button
+            onclick={() => {
+              deleteModule(module as ExtModule);
+              dialogOpen = false;
+            }}>Delete</Button
           >
         {/snippet}
       </AlertDialog.Action>

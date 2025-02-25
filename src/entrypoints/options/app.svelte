@@ -4,21 +4,25 @@
   import { ModeWatcher } from 'mode-watcher';
   import OptionsSidebar from '$lib/components/options-sidebar.svelte';
   import Router from 'svelte-spa-router';
-  import RulesetDetail from './RulesetDetail.svelte';
-  import RulesetAdd from './RulesetAdd.svelte';
+  import RulesetDetail from './ruleset-detail.svelte';
+  import Add from './ruleset/add.svelte';
   import { Toaster } from '$lib/components/ui/sonner/index';
-  import Modules from './Modules.svelte';
+  import Modules from './modules.svelte';
   import Options from './Options.svelte';
-  import Settings from './Settings.svelte';
+  import Settings from './settings/settings.svelte';
+  import Scripts from './scripts.svelte';
   import NotFound from './404.svelte';
   import { isUserScriptsAvailable } from '$lib/utils';
+  import Appeareance from './settings/appeareance.svelte';
 
   const routes = {
     '/': Options,
     '/modules': Modules,
-    '/ruleset/add': RulesetAdd,
+    '/ruleset/add': Add,
     '/ruleset/*': RulesetDetail,
     '/settings': Settings,
+    '/settings/appearance': Appeareance,
+    '/scripts': Scripts,
     '*': NotFound,
   };
 
@@ -66,4 +70,5 @@
     <main class="w-full">
       <Router {routes} />
     </main>
-  </Sidebar.Provider>{/if}
+  </Sidebar.Provider>
+{/if}

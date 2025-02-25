@@ -60,6 +60,7 @@
       language: language,
       minimap: { enabled: false },
       value: value,
+      automaticLayout: true,
     });
     if (vimMode) {
       initVimMode(editor, vimStatus);

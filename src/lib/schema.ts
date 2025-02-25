@@ -26,7 +26,7 @@ export type NoIdRuleset = z.infer<typeof NoIDRulesetSchema>;
 
 export const ExtModuleSchema = z.object({
 	id: z.string(),
-	name: z.string(),
+	name: z.string().min(1),
 	source: z.string().url(),
 	autoUpdate: z.boolean(),
 })
@@ -36,7 +36,7 @@ export const ExtModuleObjSchema = z.object({
 	identifier: z.object({
 		contentLength: z.string().nullable(),
 		etag: z.string().nullable(),
-		hash: z.number(),
+		hash: z.number().nullable(),
 	})
 })
 
@@ -50,3 +50,17 @@ export const RulesetContentSchema = z.object({
 })
 
 export type RulesetContent = z.infer<typeof RulesetContentSchema>;
+
+export const UrlMatchPatternSchema = z.union([
+	// Special case: "<all_urls>"
+	z.literal("<all_urls>"),
+
+	// General case: <scheme>://<host>/<path>
+	z.string().regex(
+		/^(?:(\*|http|https|file):\/\/)(\*|(?:\*\.)?[a-zA-Z0-9.-]+)(\/.*)$/,
+		{
+			message: "Invalid match pattern. Ensure it follows the <scheme>://<host>/<path> format.",
+		}
+	),
+]);
+export type UrlMatchPattern = z.infer<typeof UrlMatchPatternSchema>;
