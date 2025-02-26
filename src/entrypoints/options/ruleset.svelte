@@ -1,9 +1,8 @@
 <script lang="ts">
   import * as Command from '$lib/components/ui/command/index.js';
   import * as Popover from '$lib/components/ui/popover/index.js';
-  import { Check } from 'lucide-svelte';
+  import { BadgeCheck, BadgeX, Check, PlusCircle } from 'lucide-svelte';
   import { cn } from '$lib/utils.js';
-  import { Save } from 'lucide-svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
@@ -15,7 +14,6 @@
     type Ruleset,
   } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
-  import { toast } from 'svelte-sonner';
 
   let { ruleset }: { ruleset?: Ruleset } = $props();
 
@@ -45,16 +43,12 @@
 
   let moduleLength = $derived(formRuleset?.modules.length);
 
-  const rulesetContent = '';
-
-  let urlInput: HTMLElement;
-
   function validateUrlPattern() {
     const urls = formRuleset?.urls.split(',');
     const matches: string[] = [];
     const excludeMatches: string[] = [];
 
-    const urlinput = document.getElementById('url-input');
+    const urlInput = document.getElementById('url-input');
     try {
       urls?.forEach((url) => {
         url = url.trimStart();
@@ -64,15 +58,19 @@
           ? excludeMatches.push(url.substring(1))
           : matches.push(url);
 
-        urlinput!.classList.contains('border-red-600')
-          ? urlinput?.classList.remove('border-red-600')
+        urlInput!.classList.contains('border-red-600')
+          ? urlInput?.classList.remove('border-red-600')
           : null;
       });
     } catch (error) {
-      urlinput!.classList.contains('border-red-600')
+      urlInput!.classList.contains('border-red-600')
         ? null
-        : urlinput?.classList.add('border-red-600');
+        : urlInput?.classList.add('border-red-600');
     }
+  }
+
+  function onclick() {
+    // TODO: submit
   }
 </script>
 
@@ -83,13 +81,23 @@
     class="basis-2/6"
     bind:value={formRuleset!.name}
   />
-  <Input
-    type="text"
-    placeholder="https://example.com/*,!https://example.com/not_here"
-    bind:value={formRuleset!.urls}
-    onfocusout={validateUrlPattern}
-    id="url-input"
-  />
+  <div class="relative w-full">
+    <Input
+      type="text"
+      placeholder="https://example.com/*,!https://example.com/not_here"
+      bind:value={formRuleset!.urls}
+      onfocusout={validateUrlPattern}
+      id="url-input"
+    />
+    <div class="absolute right-3 top-2">
+      <!--TODO: change on validate-->
+      {#if true}
+        <BadgeCheck color="#67d45e" />
+      {:else}
+        <BadgeX color="#dc2626" />
+      {/if}
+    </div>
+  </div>
   <Popover.Root bind:open>
     <Popover.Trigger bind:ref>
       {#snippet child({ props })}
@@ -150,8 +158,8 @@
       </Command.Root>
     </Popover.Content>
   </Popover.Root>
-  <Button class="ml-auto">
-    <Save />Save
+  <Button class="ml-auto" {onclick}>
+    <PlusCircle />Create
   </Button>
 </div>
 <div class="mt-2 flex h-full">

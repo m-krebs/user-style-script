@@ -1,4 +1,4 @@
-import { nullable, z } from 'zod';
+import { z } from 'zod';
 
 export const SettingsSchema = z.object({
 	editor: z.object({
@@ -13,7 +13,7 @@ export const RulesetSchema = z.object({
 	id: z.string(),
 	created: z.number(),
 	updated: z.number(),
-	name: z.string(),
+	name: z.string().min(1),
 	active: z.boolean(),
 	urls: z.string(),
 	modules: z.array(z.string()),

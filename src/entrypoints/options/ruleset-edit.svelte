@@ -1,14 +1,19 @@
 <script lang="ts">
   import * as Command from '$lib/components/ui/command/index.js';
   import * as Popover from '$lib/components/ui/popover/index.js';
-  import { Check } from 'lucide-svelte';
+  import { Check, Save, BadgeCheck, BadgeX } from 'lucide-svelte';
   import { cn } from '$lib/utils.js';
-  import { Save } from 'lucide-svelte';
+  import {} from 'lucide-svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
   import Input from '$lib/components/ui/input/input.svelte';
-  import type { RulesetContent, ExtModule, Ruleset } from '$lib/schema';
+  import {
+    type RulesetContent,
+    type ExtModule,
+    type Ruleset,
+    UrlMatchPatternSchema,
+  } from '$lib/schema';
   import { ExtModuleStorage, RulesetStorage } from '$lib/storage';
   import { toast } from 'svelte-sonner';
 
@@ -36,25 +41,57 @@
   let cssValue = $state('');
 
   async function updateRuleset() {
-    console.log(typeof formRuleset.modules, formRuleset.modules);
+    try {
+      await RulesetStorage.update({
+        ...formRuleset,
+        updated: Date.now(),
+        modules: $state.snapshot(formRuleset.modules),
+      });
 
-    await RulesetStorage.update({
-      ...formRuleset,
-      updated: Date.now(),
-      modules: $state.snapshot(formRuleset.modules),
-    });
-
-    console.log(jsValue, cssValue);
-    await rulesetContent.setValue({ js: jsValue, css: cssValue });
+      await rulesetContent.setValue({ js: jsValue, css: cssValue });
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message);
+      return;
+    }
 
     toast.success('Updated ruleset');
+  }
+
+  const rulesetError = $state({
+    name: '',
+    urls: 'asdf',
+  });
+
+  let validUrl = $state(true);
+
+  function validateUrlPattern() {
+    const urls = formRuleset?.urls.split(',');
+    const matches: string[] = [];
+    const excludeMatches: string[] = [];
+
+    try {
+      urls?.forEach((url) => {
+        url = url.trimStart();
+        if (url === '') return;
+        UrlMatchPatternSchema.parse(url);
+        url.startsWith('!')
+          ? excludeMatches.push(url.substring(1))
+          : matches.push(url);
+      });
+      validUrl = true;
+    } catch (error) {
+      validUrl = false;
+    }
+  }
+
+  function onclick() {
+    validateUrlPattern();
+    updateRuleset();
   }
 
   onMount(async () => {
     jsValue = (await rulesetContent.getValue()).js;
     cssValue = (await rulesetContent.getValue()).css;
-
-    console.log(rulesetContent.getValue());
   });
 </script>
 
@@ -65,7 +102,22 @@
     class="basis-2/6"
     bind:value={formRuleset!.name}
   />
-  <Input type="text" placeholder="URL pattern" bind:value={formRuleset!.urls} />
+  <div class="relative w-full">
+    <Input
+      type="text"
+      placeholder="URL pattern"
+      bind:value={formRuleset!.urls}
+      oninput={validateUrlPattern}
+      class={validUrl ? '' : 'border-red-600'}
+    />
+    <div class="absolute right-3 top-2">
+      {#if validUrl}
+        <BadgeCheck color="#67d45e" />
+      {:else}
+        <BadgeX color="#dc2626" />
+      {/if}
+    </div>
+  </div>
   <Popover.Root bind:open>
     <Popover.Trigger bind:ref>
       {#snippet child({ props })}
@@ -126,12 +178,7 @@
       </Command.Root>
     </Popover.Content>
   </Popover.Root>
-  <Button
-    class="ml-auto"
-    onclick={() => {
-      updateRuleset();
-    }}
-  >
+  <Button class="ml-auto" {onclick}>
     <Save />Save
   </Button>
 </div>
