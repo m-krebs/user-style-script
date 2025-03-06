@@ -1,6 +1,5 @@
 import { ExtModule, ExtModuleObj, NoIDExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
 import { hashCode } from "$lib/utils";
-import { log } from "console";
 import { storage } from "wxt/storage"
 
 export const RulesetStorage = class {
@@ -41,7 +40,7 @@ export const RulesetStorage = class {
 			rules[index] = ruleset
 		}
 
-		RulesetStorage.item.setValue(rules).then(result => Promise.resolve(true))
+		await RulesetStorage.item.setValue(rules);
 	}
 
 	static async get(id: string) {
