@@ -3,7 +3,6 @@
   import * as Popover from '$lib/components/ui/popover/index.js';
   import { Check, Save, BadgeCheck, BadgeX } from 'lucide-svelte';
   import { cn } from '$lib/utils.js';
-  import {} from 'lucide-svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
@@ -21,14 +20,11 @@
   let formRuleset: Ruleset = $state(ruleset);
   let modules: ExtModule[] = $state([]);
 
-  ExtModuleStorage.watch((newModuleList) => {
-    modules = newModuleList;
-  });
-
   let open = $state(false);
   let ref = $state<HTMLButtonElement>(null!);
-
-  console.log(formRuleset);
+  let jsValue = $state('');
+  let cssValue = $state('');
+  let validUrl = $state(true);
 
   let modulesSelectedLength = $derived(formRuleset?.modules.length);
 
@@ -36,10 +32,6 @@
     `local:${formRuleset?.id}`,
     {},
   );
-
-  let jsValue = $state('');
-  let cssValue = $state('');
-
   async function updateRuleset() {
     try {
       await RulesetStorage.update({
@@ -56,13 +48,6 @@
 
     toast.success('Updated ruleset');
   }
-
-  const rulesetError = $state({
-    name: '',
-    urls: 'asdf',
-  });
-
-  let validUrl = $state(true);
 
   function validateUrlPattern() {
     const urls = formRuleset?.urls.split(',');
@@ -86,12 +71,18 @@
 
   function onclick() {
     validateUrlPattern();
+    if (!validUrl) {
+    }
     updateRuleset();
   }
 
+  ExtModuleStorage.watch((newModuleList) => {
+    modules = newModuleList;
+  });
+
   onMount(async () => {
-    jsValue = (await rulesetContent.getValue()).js;
-    cssValue = (await rulesetContent.getValue()).css;
+    jsValue = (await rulesetContent.getValue())?.js;
+    cssValue = (await rulesetContent.getValue())?.css;
   });
 </script>
 

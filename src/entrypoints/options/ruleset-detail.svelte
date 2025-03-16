@@ -8,6 +8,8 @@
   let { params } = $props();
 
   const ruleset = RulesetStorage.get(params.wild);
+
+  console.log(ruleset);
 </script>
 
 <div class="flex h-screen flex-col px-3">
