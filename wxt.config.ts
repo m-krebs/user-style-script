@@ -9,7 +9,6 @@ export default defineConfig({
   },
   manifestVersion: 3,
   srcDir: 'src',
-  extensionApi: 'chrome',
   modules: ['@wxt-dev/module-svelte'],
   alias: {
     $lib: path.resolve("./src/lib/"),

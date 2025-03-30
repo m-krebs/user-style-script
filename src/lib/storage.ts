@@ -1,6 +1,6 @@
-import { ExtModule, ExtModuleObj, NoIDExtModule, NoIdRuleset, Ruleset, RulesetContent } from "$lib/schema";
+import { ExtModule, ExtModuleObj, NoIDExtModule, NoIdRuleset, Ruleset } from "$lib/schema";
 import { hashCode } from "$lib/utils";
-import { storage } from "wxt/storage"
+import { storage } from "wxt/utils/storage"
 
 export const RulesetStorage = class {
 	static item = storage.defineItem<Ruleset[]>('local:rulesets', {

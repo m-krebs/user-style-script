@@ -29,7 +29,7 @@ export async function createUserScript(opts: UserScriptOpts) {
 		csp: "script-src 'self'"
 	})
 
-	const scriptObj: browser.userScripts.RegisteredUserScripts = {
+	const scriptObj: Browser.userScripts.RegisteredUserScript = {
 		id: opts.id,
 		matches: opts.matches,
 		js: [{ code: opts.js }],
