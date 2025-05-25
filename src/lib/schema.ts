@@ -13,7 +13,7 @@ export const RulesetSchema = z.object({
 	id: z.string(),
 	created: z.number(),
 	updated: z.number(),
-	name: z.string().min(1),
+	name: z.string().min(1, "Name must be at least 1 character long"),
 	active: z.boolean(),
 	urls: z.string(),
 	modules: z.array(z.string()),
@@ -26,7 +26,7 @@ export type NoIdRuleset = z.infer<typeof NoIDRulesetSchema>;
 
 export const ExtModuleSchema = z.object({
 	id: z.string(),
-	name: z.string().min(1),
+	name: z.string().min(1, "Name must be at least 1 character long"),
 	source: z.string().url(),
 	autoUpdate: z.boolean(),
 })

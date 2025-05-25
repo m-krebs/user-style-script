@@ -11,7 +11,7 @@ export const RulesetStorage = class {
 			updated: Date.now(),
 			modules: [],
 			name: "Default Example",
-			urls: ""
+			urls: "https://example.com/"
 		}]
 	})
 
@@ -62,9 +62,9 @@ export const ExtModuleStorage = class {
 	static item = storage.defineItem<ExtModule[]>('local:modules', {
 		defaultValue: [{
 			id: "394u39f93999349i39",
-			source: "https://example.com",
+			source: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js",
 			name: "jnotquery",
-			autoUpdate: true
+			autoUpdate: false
 		}]
 	});
 

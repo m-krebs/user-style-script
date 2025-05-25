@@ -8,6 +8,7 @@
   import { NoIDExtModuleSchema, type NoIDExtModule } from '$lib/schema';
   import { toast } from 'svelte-sonner';
   import { ExtModuleStorage } from '$lib/storage';
+  import { fade } from 'svelte/transition';
 
   let moduleForm: NoIDExtModule = $state({
     name: '',
@@ -113,7 +114,7 @@
         bind:value={moduleForm!.name}
       />
       {#if moduleError.name}
-        <p class="text-destructive">{moduleError.name}</p>
+        <p transition:fade class="text-destructive">{moduleError.name}</p>
       {/if}
     </div>
     <div class="flex flex-col gap-1.5">
@@ -130,7 +131,7 @@
         bind:value={moduleForm!.source}
       />
       {#if moduleError.source}
-        <p class="text-destructive">{moduleError.source}</p>
+        <p transition:fade class="text-destructive">{moduleError.source}</p>
       {/if}
     </div>
     <div class="ml-0 flex flex-col gap-2">

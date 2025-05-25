@@ -7,6 +7,7 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import type { NoIDExtModule, ExtModule } from '$lib/schema';
   import CreateModuleDialog from '$lib/components/modules/create-module-dialog.svelte';
+  import CommandNav from '$lib/components/command-nav.svelte';
 
   let data: ExtModule[] = $state([]);
 
@@ -22,6 +23,7 @@
 </script>
 
 <div class="px-3">
+  <CommandNav />
   <div class="my-2 flex items-center justify-start gap-2">
     <SidebarTrigger class="p-4" />
     <Separator orientation="vertical" class="mr-2 h-4" />

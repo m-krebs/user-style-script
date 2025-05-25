@@ -1,8 +1,8 @@
 <script lang="ts">
   import * as Command from '$lib/components/ui/command/index.js';
   import * as Popover from '$lib/components/ui/popover/index.js';
-  import { Check, Save, BadgeCheck, BadgeX } from 'lucide-svelte';
-  import { cn } from '$lib/utils.js';
+  import { Check, Save, BadgeCheck, BadgeX, LoaderCircle } from 'lucide-svelte';
+  import { cn, registerOrUpdateUserScript } from '$lib/utils.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
@@ -25,6 +25,7 @@
   let jsValue = $state('');
   let cssValue = $state('');
   let validUrl = $state(true);
+  let startSave = $state(false);
 
   let modulesSelectedLength = $derived(formRuleset?.modules.length);
 
@@ -33,10 +34,11 @@
     {},
   );
   async function updateRuleset() {
+    const dateNow = Date.now();
     try {
       await RulesetStorage.update({
         ...formRuleset,
-        updated: Date.now(),
+        updated: dateNow,
         modules: $state.snapshot(formRuleset.modules),
       });
 
@@ -45,6 +47,14 @@
       if (error instanceof Error) toast.error(error.message);
       return;
     }
+
+    registerOrUpdateUserScript({
+      id: formRuleset?.id,
+      // TODO: split formRuleset.urls to populate matches:
+      matches: ['https://example.com/*'],
+      excludeMatches: [],
+      js: jsValue,
+    });
 
     toast.success('Updated ruleset');
   }
@@ -70,10 +80,12 @@
   }
 
   function onclick() {
+    startSave = true;
     validateUrlPattern();
     if (!validUrl) {
     }
     updateRuleset();
+    startSave = false;
   }
 
   ExtModuleStorage.watch((newModuleList) => {
@@ -170,7 +182,12 @@
     </Popover.Content>
   </Popover.Root>
   <Button class="ml-auto" {onclick}>
-    <Save />Save
+    {#if startSave}
+      <LoaderCircle class="animate-spin" />
+    {:else}
+      <Save />
+    {/if}
+    Save
   </Button>
 </div>
 <div class="mt-2 flex h-full">

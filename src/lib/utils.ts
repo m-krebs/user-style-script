@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { browser } from 'wxt/browser';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -17,23 +18,26 @@ export function isUserScriptsAvailable() {
 type UserScriptOpts = {
 	id: string
 	matches: string[]
+	excludeMatches: string[]
 	js: string
 }
 
-export async function createUserScript(opts: UserScriptOpts) {
+export async function registerOrUpdateUserScript(opts: UserScriptOpts) {
 	if (!isUserScriptsAvailable) throw new Error("UserScripts not available. Developer Mode is required!");
 
 	const existingScripts = await browser.userScripts.getScripts({ ids: [opts.id] });
 
-	browser.userScripts.configureWorld({
-		csp: "script-src 'self'"
-	})
+	// TODO: cleanup
+	// browser.userScripts.configureWorld({
+	// 	csp: "script-src 'self'"
+	// })
 
 	const scriptObj: Browser.userScripts.RegisteredUserScript = {
 		id: opts.id,
 		matches: opts.matches,
+		excludeMatches: opts.excludeMatches,
 		js: [{ code: opts.js }],
-		world: 'MAIN'
+		// world: 'MAIN'
 	}
 
 	if (existingScripts.length > 0) {

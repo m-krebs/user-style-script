@@ -28,8 +28,10 @@ export const columns: ColumnDef<Ruleset>[] = [
           ruleset.active = !ruleset.active;
           await RulesetStorage.update(ruleset)
           if (!ruleset.active) {
+            // TODO: unregister userScript
             toast(ToastHTML, { componentProps: { message: `${row.original.name} - <b>Disabled</b>` } })
           } else {
+            // TODO: register userScript
             toast(ToastHTML, { componentProps: { message: `${row.original.name} - <b>Enabled</b>` } })
           }
         }

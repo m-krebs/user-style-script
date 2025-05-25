@@ -7,6 +7,8 @@
   import type { Ruleset } from '$lib/schema';
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import DataTable from '$lib/components/data-table.svelte';
+  import CommandNav from '$lib/components/command-nav.svelte';
+  import { browser } from 'wxt/browser';
 
   let data: Ruleset[] = $state([]);
 
@@ -20,6 +22,7 @@
 </script>
 
 <div class="px-3">
+  <CommandNav />
   <div class="my-2 flex items-center justify-start gap-2">
     <SidebarTrigger class="p-4" />
     <Separator orientation="vertical" class="mr-2 h-4" />
@@ -30,4 +33,10 @@
     Create new<PlusCircle />
   </Button>
   <DataTable bind:data {columns} />
+
+  {#await browser.userScripts.getScripts()}
+    <div>Loading</div>
+  {:then data}
+    <div>{JSON.stringify(data)}</div>
+  {/await}
 </div>

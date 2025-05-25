@@ -7,11 +7,11 @@ import ModuleActions from "./module-actions.svelte"
 
 export const columns: ColumnDef<ExtModule>[] = [
   {
-    accessorKey: "source",
-    header: "Source"
-  }, {
     accessorKey: "name",
     header: "Name",
+  }, {
+    accessorKey: "source",
+    header: "Source"
   },
 
   {
