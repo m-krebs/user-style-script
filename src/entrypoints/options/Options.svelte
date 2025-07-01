@@ -8,7 +8,6 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import DataTable from '$lib/components/data-table.svelte';
   import CommandNav from '$lib/components/command-nav.svelte';
-  import { browser } from 'wxt/browser';
 
   let data: Ruleset[] = $state([]);
 
@@ -34,9 +33,10 @@
   </Button>
   <DataTable bind:data {columns} />
 
-  {#await browser.userScripts.getScripts()}
-    <div>Loading</div>
-  {:then data}
-    <div>{JSON.stringify(data)}</div>
-  {/await}
+  <!-- FIXME: this doesn't work in firefox -->
+  <!-- {#await browser.userScripts.getScripts()} -->
+  <!--   <div>Loading</div> -->
+  <!-- {:then data} -->
+  <!--   <div>{JSON.stringify(data)}</div> -->
+  <!-- {/await} -->
 </div>

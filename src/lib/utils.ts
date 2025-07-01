@@ -62,3 +62,17 @@ export function hashCode(string: string) {
 	}
 	return hash;
 }
+
+export function truncateUrl(url: string, maxLength: number = 30) {
+	try {
+		const parsedUrl = new URL(url);
+
+		if (url.length > maxLength) {
+			return parsedUrl.protocol + "//" + parsedUrl.hostname + "..."
+		} else {
+			return url;
+		}
+	} catch (error) {
+		return url
+	}
+}

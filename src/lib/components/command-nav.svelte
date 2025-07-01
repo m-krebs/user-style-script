@@ -54,7 +54,11 @@
         <ScrollText class="mr-2 size-4" />
         <span>Rulesets > Overview</span>
       </Command.Item>
-      <Command.Item>
+      <Command.Item
+        onSelect={() => {
+          window.location.href = '#/ruleset/add';
+        }}
+      >
         <ScrollText class="mr-2 size-4" />
         <span>Rulesets > Create new</span>
       </Command.Item>
