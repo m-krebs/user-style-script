@@ -14,6 +14,7 @@
     type Ruleset,
   } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
+  import JsonModal from '$lib/components/json-modal.svelte';
 
   let { ruleset }: { ruleset?: Ruleset } = $props();
 
@@ -84,7 +85,7 @@
   <div class="relative w-full">
     <Input
       type="text"
-      placeholder="https://example.com/*,!https://example.com/not_here"
+      placeholder="URL Pattern"
       bind:value={formRuleset!.urls}
       onfocusout={validateUrlPattern}
       id="url-input"
@@ -162,6 +163,7 @@
     <PlusCircle />Create
   </Button>
 </div>
+<JsonModal bind:json={formRuleset} />
 <div class="mt-2 flex h-full">
   <Editor class="w-full" />
   <Editor class="w-full" language="scss" placeholder="Type SCSS/CSS here" />
