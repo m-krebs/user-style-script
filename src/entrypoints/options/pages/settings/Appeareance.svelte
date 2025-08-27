@@ -1,7 +1,7 @@
 <script lang="ts">
-  import * as RadioGroup from '$lib/components/ui/radio-group';
-  import { toggleMode, mode } from 'mode-watcher';
   import { Label } from '$lib/components/ui/label/index';
+  import * as RadioGroup from '$lib/components/ui/radio-group';
+  import { mode, toggleMode } from 'mode-watcher';
 </script>
 
 <RadioGroup.Root
@@ -64,5 +64,4 @@
     </div>
     <span class="block w-full p-2 text-center font-normal"> Dark </span>
   </Label>
-  <!-- <RadioGroup.Input name="theme" /> -->
 </RadioGroup.Root>

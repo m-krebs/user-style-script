@@ -47,5 +47,9 @@
     "vite-plugin-monaco-editor": "^1.1.0",
     "wxt": "^0.20.0",
     "zod": "^3.25.28"
+  },
+  "dependencies": {
+    "@dnd-kit-svelte/core": "^0.0.11",
+    "@dnd-kit-svelte/sortable": "^0.0.11"
   }
 }

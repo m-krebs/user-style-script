@@ -1,14 +1,14 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { ExternalLink, LoaderCircle, PlusCircle } from 'lucide-svelte';
-  import { Label } from '$lib/components/ui/label';
+  import * as Dialog from '$lib/components/ui/dialog';
   import { Input } from '$lib/components/ui/input';
+  import { Label } from '$lib/components/ui/label';
   import { Switch } from '$lib/components/ui/switch';
-  import { NoIDExtModuleSchema, type NoIDExtModule } from '$lib/schema';
-  import { toast } from 'svelte-sonner';
+  import { type NoIDExtModule, NoIDExtModuleSchema } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
+  import { LoaderCircle, PlusCircle } from 'lucide-svelte';
   import { fade } from 'svelte/transition';
+  import { toast } from 'svelte-sonner';
 
   let moduleForm: NoIDExtModule = $state({
     name: '',

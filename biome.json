@@ -19,13 +19,14 @@
       "!**/package-lock.json",
       "!**/pnpm-lock.yaml",
       "!**/yarn.lock",
-      "!**/.output/**"
+      "!**/.output/**",
+      "!**/*.svelte"
     ]
   },
   "linter": {
     "enabled": true,
     "rules": { "recommended": true },
-    "includes": ["**", "!**/.output/**"]
+    "includes": ["**", "!**/.output/**", "!**/*.svelte"]
   },
   "javascript": {
     "formatter": {

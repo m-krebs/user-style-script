@@ -1,14 +1,6 @@
 <script lang="ts">
-  import {
-    CalculatorIcon,
-    UserIcon,
-    CalendarIcon,
-    CreditCardIcon,
-    SettingsIcon,
-    Puzzle,
-    ScrollText,
-  } from 'lucide-svelte';
   import * as Command from '$lib/components/ui/command/index.js';
+  import { Puzzle, ScrollText, SettingsIcon } from 'lucide-svelte';
 
   let open = $state(false);
 

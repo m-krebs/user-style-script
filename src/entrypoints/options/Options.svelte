@@ -1,13 +1,13 @@
 <script lang="ts">
+  import CommandNav from '$lib/components/command-nav.svelte';
+  import DataTable from '$lib/components/data-table.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import Separator from '$lib/components/ui/separator/separator.svelte';
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
+  import type { Ruleset } from '$lib/schema';
+  import { RulesetStorage } from '$lib/storage';
   import { PlusCircle } from 'lucide-svelte';
   import { columns } from './ruleset-columns';
-  import { Button } from '$lib/components/ui/button';
-  import { RulesetStorage } from '$lib/storage';
-  import type { Ruleset } from '$lib/schema';
-  import Separator from '$lib/components/ui/separator/separator.svelte';
-  import DataTable from '$lib/components/data-table.svelte';
-  import CommandNav from '$lib/components/command-nav.svelte';
 
   let data: Ruleset[] = $state([]);
 

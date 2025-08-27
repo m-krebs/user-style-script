@@ -1,19 +1,19 @@
 <script lang="ts">
+  import OptionsSidebar from '$lib/components/options-sidebar.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index';
+  import { Toaster } from '$lib/components/ui/sonner/index';
+  import { isUserScriptsAvailable } from '$lib/utils';
   import { AlertTriangle } from 'lucide-svelte';
   import { ModeWatcher } from 'mode-watcher';
-  import OptionsSidebar from '$lib/components/options-sidebar.svelte';
   import Router from 'svelte-spa-router';
-  import RulesetDetail from './ruleset-detail.svelte';
-  import Add from './ruleset/add.svelte';
-  import { Toaster } from '$lib/components/ui/sonner/index';
   import Modules from './modules.svelte';
   import Options from './Options.svelte';
-  import Settings from './settings/settings.svelte';
+  import NotFound from './pages/404.svelte';
+  import Appeareance from './pages/settings/Appeareance.svelte';
+  import Settings from './pages/settings/Settings.svelte';
+  import Add from './ruleset/add.svelte';
+  import RulesetDetail from './ruleset-detail.svelte';
   import Scripts from './scripts.svelte';
-  import NotFound from './404.svelte';
-  import { isUserScriptsAvailable } from '$lib/utils';
-  import Appeareance from './settings/appeareance.svelte';
 
   const routes = {
     '/': Options,

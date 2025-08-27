@@ -2,33 +2,29 @@
   import * as Breadcrumb from '$lib/components/ui/breadcrumb/index';
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
-  import SettingsAppeareance from './appeareance.svelte';
-  import SettingsSelect from './settings-select.svelte';
-  import * as Sidebar from '$lib/components/ui/sidebar/index';
-  import { Button } from '$lib/components/ui/button';
+  import Appeareance from './Appeareance.svelte';
+  import General from './General.svelte';
+  import SettingsSelect from './SettingsSelect.svelte';
 
   const settingsPages = [
     {
       value: 'general',
       label: 'General',
-      component: '',
+      component: General,
     },
     {
       value: 'appearance',
       label: 'Appearance',
-      component: SettingsAppeareance,
+      component: Appeareance,
     },
   ];
   let value = $state(settingsPages[0].value);
-  let selectedLabel = $derived(
-    value ? settingsPages.find((p) => p.value === value)?.label : 'Select page',
-  );
-  let component = $derived(
+
+  let SettingComponent = $derived(
     value
       ? settingsPages.find((p) => p.value === value)?.component
-      : 'Select page',
+      : settingsPages[0]?.component,
   );
-  $inspect(selectedLabel);
 </script>
 
 <div class="px-3">
@@ -50,5 +46,8 @@
     </Breadcrumb.Root>
   </div>
   <Separator />
+
+  <!-- <Appeareance /> -->
   <div class="flex justify-between py-2"></div>
+  <SettingComponent></SettingComponent>
 </div>

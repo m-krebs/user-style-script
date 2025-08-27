@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@dnd-kit-svelte/core':
+        specifier: ^0.0.11
+        version: 0.0.11(svelte@5.11.2)
+      '@dnd-kit-svelte/sortable':
+        specifier: ^0.0.11
+        version: 0.0.11(svelte@5.11.2)
     devDependencies:
       '@biomejs/biome':
         specifier: 2.0.6
@@ -224,6 +231,26 @@ packages:
     resolution: {integrity: sha512-8lO1hSeTgtxcOHhp4tTWq/JaOysp5KNbbyFoxNEBnwkCDZu/Bji3ZfOaG++Riv9jN6c9bgdLBOZqJTC5VJPRKQ==}
     engines: {node: '>= 0.10.4'}
     hasBin: true
+
+  '@dnd-kit-svelte/accessibility@0.0.11':
+    resolution: {integrity: sha512-YkMjzabpnwELyeOSC2COV6EIGWZM8m4kgi/wIMwG0g/ZO3WWuzkMiLRLhYZqRkrEdpoz5tZnVclw+x/kcUjQHw==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@dnd-kit-svelte/core@0.0.11':
+    resolution: {integrity: sha512-bVqutZhSOk3nQsjwJ0SveUrPeBgUO/wajfon1AiKA8mxfQhaUG97CfoQLs7tLW3YxSkHkLPhYRw9WQat7OMB7g==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@dnd-kit-svelte/sortable@0.0.11':
+    resolution: {integrity: sha512-QeFvpjR9KAIVFs0/S4kGtzSNZzEmIp+d8DiNCRUeVC2E4Z5P4INzdzJl7m1EM7UjvdNayfLWcMhLpyTIHqHxQQ==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@dnd-kit-svelte/utilities@0.0.11':
+    resolution: {integrity: sha512-Y9Z016gLdieHiAVoteSBa1tvrgug1/Rl5wdKw/2g1Fd4G0q9HWIyPe2evKrv8H5ePfcNegA1jN7fneDVmHd3pQ==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   '@effect/schema@0.75.5':
     resolution: {integrity: sha512-TQInulTVCuF+9EIbJpyLP6dvxbQJMphrnRqgexm/Ze39rSjfhJuufF7XvU3SxTgg3HnL7B/kpORTJbHhlE6thw==}
@@ -3531,6 +3558,34 @@ snapshots:
       split: 1.0.1
     transitivePeerDependencies:
       - supports-color
+
+  '@dnd-kit-svelte/accessibility@0.0.11(svelte@5.11.2)':
+    dependencies:
+      '@dnd-kit-svelte/utilities': 0.0.11(svelte@5.11.2)
+      esm-env: 1.2.2
+      runed: 0.23.3(svelte@5.11.2)
+      svelte: 5.11.2
+
+  '@dnd-kit-svelte/core@0.0.11(svelte@5.11.2)':
+    dependencies:
+      '@dnd-kit-svelte/accessibility': 0.0.11(svelte@5.11.2)
+      '@dnd-kit-svelte/utilities': 0.0.11(svelte@5.11.2)
+      runed: 0.23.3(svelte@5.11.2)
+      svelte: 5.11.2
+      svelte-toolbelt: 0.7.1(svelte@5.11.2)
+
+  '@dnd-kit-svelte/sortable@0.0.11(svelte@5.11.2)':
+    dependencies:
+      '@dnd-kit-svelte/core': 0.0.11(svelte@5.11.2)
+      '@dnd-kit-svelte/utilities': 0.0.11(svelte@5.11.2)
+      runed: 0.23.3(svelte@5.11.2)
+      svelte: 5.11.2
+      svelte-toolbelt: 0.7.1(svelte@5.11.2)
+
+  '@dnd-kit-svelte/utilities@0.0.11(svelte@5.11.2)':
+    dependencies:
+      svelte: 5.11.2
+      svelte-toolbelt: 0.7.1(svelte@5.11.2)
 
   '@effect/schema@0.75.5(effect@3.11.6)':
     dependencies:

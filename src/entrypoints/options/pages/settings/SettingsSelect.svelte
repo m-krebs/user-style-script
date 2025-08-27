@@ -2,12 +2,11 @@
   import { Select } from 'bits-ui';
   import { ChevronDown } from 'lucide-svelte';
 
-  let { items, selected = $bindable() }: { items: any; selected: any } =
-    $props();
+  let { items, selected = $bindable() }: { items:any ; selected: any } = $props();
 
   const selectedLabel = $derived(
     selected
-      ? items.find((item) => item.value === selected)?.label
+      ? items.find((item: any) => item.value === selected)?.label
       : 'Select a theme',
   );
 </script>
