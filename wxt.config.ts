@@ -12,6 +12,7 @@ export default defineConfig({
   modules: ['@wxt-dev/module-svelte'],
   alias: {
     $lib: path.resolve('./src/lib/'),
+    $pages: path.resolve('./src/entrypoints/options/pages/'),
     $assets: path.resolve('./src/assets/'),
   },
   vite: () => ({

@@ -4,12 +4,11 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import { RulesetStorage } from '$lib/storage';
   import RulesetEdit from './ruleset-edit.svelte';
+  import NotFound from '$pages/404.svelte';
 
   let { params } = $props();
 
   const ruleset = RulesetStorage.get(params.wild);
-
-  console.log(ruleset);
 </script>
 
 <div class="flex h-screen flex-col px-3">
@@ -32,6 +31,10 @@
   <Separator />
 
   {#await ruleset then ruleset}
-    <RulesetEdit {ruleset} />
+    {#if !ruleset}
+      <NotFound />
+    {:else}
+      <RulesetEdit {ruleset} />
+    {/if}
   {/await}
 </div>

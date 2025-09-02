@@ -1,6 +1,14 @@
 <script lang="ts">
   import * as Sidebar from '$lib/components/ui/sidebar/index';
-  import { Home, Puzzle, Settings } from 'lucide-svelte';
+  import { Bug, Home, Puzzle, Settings } from 'lucide-svelte';
+  import Separator from '$lib/components/ui/separator/separator.svelte';
+
+  let debug = $state(false);
+  browser.management.getSelf((info) => {
+    if (info.installType === 'development') {
+      debug = true;
+    }
+  });
 
   const close = () => {
     // TODO: close sidebar on small screens
@@ -32,6 +40,16 @@
           {/snippet}
         </Sidebar.MenuButton>
       </Sidebar.MenuItem>
+      {#if debug}
+        <Separator />
+        <Sidebar.MenuItem>
+          <Sidebar.MenuButton>
+            {#snippet child({ props })}
+              <a href="#/debug" {...props}><Bug />Debug</a>
+            {/snippet}
+          </Sidebar.MenuButton>
+        </Sidebar.MenuItem>
+      {/if}
     </Sidebar.Menu>
   </Sidebar.Content>
 </Sidebar.Root>

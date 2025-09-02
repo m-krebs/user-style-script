@@ -33,6 +33,7 @@
     `local:${formRuleset?.id}`,
     {},
   );
+
   async function updateRuleset() {
     const dateNow = Date.now();
     try {
@@ -43,6 +44,8 @@
       });
 
       await rulesetContent.setValue({ js: jsValue, css: cssValue });
+
+      // createUserScript({formRuleset?.id, })
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
       return;

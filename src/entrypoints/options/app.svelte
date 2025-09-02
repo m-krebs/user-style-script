@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { AlertTriangle } from 'lucide-svelte';
+  import { ModeWatcher } from 'mode-watcher';
+  import Router from 'svelte-spa-router';
   import OptionsSidebar from '$lib/components/options-sidebar.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index';
   import { Toaster } from '$lib/components/ui/sonner/index';
   import { isUserScriptsAvailable } from '$lib/utils';
-  import { AlertTriangle } from 'lucide-svelte';
-  import { ModeWatcher } from 'mode-watcher';
-  import Router from 'svelte-spa-router';
+  import Debug from '$pages/Debug.svelte';
   import Modules from './modules.svelte';
   import Options from './Options.svelte';
   import NotFound from './pages/404.svelte';
@@ -17,6 +18,7 @@
 
   const routes = {
     '/': Options,
+    '/debug': Debug,
     '/modules': Modules,
     '/ruleset/add': Add,
     '/ruleset/*': RulesetDetail,
@@ -26,24 +28,27 @@
     '*': NotFound,
   };
 
-  // onMount(() => {
-  // browser.userScripts.configureWorld({
-  //   csp: "script-src 'self'",
-  // });
-  // createUserScript({
-  //   id: 'test',
-  //   matches: ['https://*.google.com/*'],
-  //   js: 'alert("Ding dong")',
-  // });
-  // });
+  let userScriptsNotification = $state(true);
 
   onMount(() => {
     if (!isUserScriptsAvailable()) {
       setInterval(() => {
         if (isUserScriptsAvailable()) location.reload();
-      }, 500);
+        userScriptsNotification = false;
+      }, 100);
     }
+
+    setInterval(() => {
+      if (!isUserScriptsAvailable() && userScriptsNotification) {
+        userScriptsNotification = false;
+        location.reload();
+      }
+    }, 2000);
   });
+
+  let version = Number(
+    navigator.userAgent.match(/(Chrome|Chromium)\/([0-9]+)/)?.[2],
+  );
 </script>
 
 <ModeWatcher />
@@ -53,15 +58,29 @@
     class="mx-auto flex flex-col items-center justify-center gap-3 p-5 align-middle text-xl text-orange-500"
   >
     <AlertTriangle />
-    For the extension to work, chrome requires developer mode to be enabled.
+    <p>
+      For the extension to work, Chrome requires
+      {#if version >= 138}
+        <b>Allow User Scripts</b> to be toggled
+      {:else}
+        <b>Developer mode</b> to be enabled
+      {/if}
+    </p>
     <div class="text-white">
       More on that can be read
-      <a
-        href="https://developer.chrome.com/docs/extensions/reference/api/userScripts#developer_mode_for_extension_users"
-        target="_blank"
-        class="underline">here</a
-      >
-      .
+      {#if version >= 138}
+        <a
+          href="https://developer.chrome.com/docs/extensions/reference/api/userScripts#chrome_versions_138_and_newer_allow_user_scripts_toggle"
+          target="_blank"
+          class="underline">here</a
+        >
+      {:else}
+        <a
+          href="https://developer.chrome.com/docs/extensions/reference/api/userScripts#chrome_versions_prior_to_138_developer_mode_toggle"
+          target="_blank"
+          class="underline">here</a
+        >
+      {/if}
     </div>
   </div>
 {:else}

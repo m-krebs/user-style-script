@@ -16,7 +16,7 @@
       class="w-full hover:backdrop-brightness-200"
     >
       <div class="flex items-center justify-center gap-3 p-5 text-orange-500">
-        <CircleAlert />Developer Mode Disabled. <br />Injection will not work!
+        <CircleAlert />UserScripts not available. <br />Injection will not work!
       </div>
     </button>
   {:else}

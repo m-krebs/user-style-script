@@ -5,6 +5,8 @@
     "paths": {
       "$lib": ["./src/lib"],
       "$lib/*": ["./src/lib/*"],
+      "$pages": ["./src/entrypoints/options/pages"],
+      "$pages/*": ["./src/entrypoints/options/pages/*"],
       "$assets": ["./src/assets"],
       "$assets/*": ["./src/assets/*"],
     }
