@@ -1,8 +1,8 @@
 <script lang="ts">
-  import CommandNav from '$lib/components/command-nav.svelte';
   import { AlertTriangle } from 'lucide-svelte';
   import { ModeWatcher } from 'mode-watcher';
   import Router from 'svelte-spa-router';
+  import CommandNav from '$lib/components/command-nav.svelte';
   import OptionsSidebar from '$lib/components/options-sidebar.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index';
   import { Toaster } from '$lib/components/ui/sonner/index';

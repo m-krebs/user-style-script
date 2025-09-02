@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { PlusCircle } from 'lucide-svelte';
   import DataTable from '$lib/components/data-table.svelte';
   import { Button } from '$lib/components/ui/button';
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
   import type { Ruleset } from '$lib/schema';
   import { RulesetStorage } from '$lib/storage';
-  import { PlusCircle } from 'lucide-svelte';
   import { columns } from './ruleset-columns';
 
   let data: Ruleset[] = $state([]);

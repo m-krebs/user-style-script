@@ -1,20 +1,20 @@
 <script lang="ts">
-  import * as Command from '$lib/components/ui/command/index.js';
-  import * as Popover from '$lib/components/ui/popover/index.js';
-  import { BadgeCheck, BadgeX, Check, PlusCircle } from 'lucide-svelte';
-  import { cn } from '$lib/utils.js';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Editor from '$lib/components/editor.svelte';
+  import JsonModal from '$lib/components/json-modal.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Command from '$lib/components/ui/command/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
+  import * as Popover from '$lib/components/ui/popover/index.js';
   import {
-    UrlMatchPatternSchema,
     type ExtModule,
     type NoIdRuleset,
     type Ruleset,
+    UrlMatchPatternSchema,
   } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
-  import JsonModal from '$lib/components/json-modal.svelte';
+  import { cn } from '$lib/utils.js';
+  import { BadgeCheck, BadgeX, Check, PlusCircle } from 'lucide-svelte';
+  import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 
   let { ruleset }: { ruleset?: Ruleset } = $props();
 
