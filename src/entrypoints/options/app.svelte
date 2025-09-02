@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CommandNav from '$lib/components/command-nav.svelte';
   import { AlertTriangle } from 'lucide-svelte';
   import { ModeWatcher } from 'mode-watcher';
   import Router from 'svelte-spa-router';
@@ -87,6 +88,7 @@
   <Sidebar.Provider>
     <OptionsSidebar />
     <main class="w-full">
+      <CommandNav />
       <Router {routes} />
     </main>
   </Sidebar.Provider>

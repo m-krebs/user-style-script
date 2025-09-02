@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CommandNav from '$lib/components/command-nav.svelte';
   import DataTable from '$lib/components/data-table.svelte';
   import { Button } from '$lib/components/ui/button';
   import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -21,7 +20,6 @@
 </script>
 
 <div class="px-3">
-  <CommandNav />
   <div class="my-2 flex items-center justify-start gap-2">
     <SidebarTrigger class="p-4" />
     <Separator orientation="vertical" class="mr-2 h-4" />
