@@ -1,0 +1,10 @@
+allowBuilds:
+  '@parcel/watcher': false
+  '@sveltejs/kit': true
+  esbuild: true
+  spawn-sync: false
+minimumReleaseAgeExclude:
+  - svelte@5.56.10
+onlyBuiltDependencies:
+  - esbuild
+  - '@tailwindcss/oxide'
