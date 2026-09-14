@@ -7,7 +7,7 @@
 <RadioGroup.Root
   class="grid max-w-md grid-cols-2 gap-8 pt-2"
   orientation="horizontal"
-  value={$mode}
+  value={mode.current}
   onValueChange={() => {
     toggleMode();
   }}
@@ -19,7 +19,7 @@
     >
       <div class="space-y-2 rounded-sm bg-[#ecedef] p-2">
         <div class="space-y-2 rounded-md bg-white p-2 shadow-sm">
-          <div class="h-2 w-[80px] rounded-lg bg-[#ecedef]"></div>
+          <div class="h-2 w-20 rounded-lg bg-[#ecedef]"></div>
           <div class="h-2 w-[100px] rounded-lg bg-[#ecedef]"></div>
         </div>
         <div
@@ -45,7 +45,7 @@
     >
       <div class="space-y-2 rounded-sm bg-zinc-950 p-2">
         <div class="space-y-2 rounded-md bg-zinc-800 p-2 shadow-sm">
-          <div class="h-2 w-[80px] rounded-lg bg-zinc-400"></div>
+          <div class="h-2 w-20 rounded-lg bg-zinc-400"></div>
           <div class="h-2 w-[100px] rounded-lg bg-zinc-400"></div>
         </div>
         <div

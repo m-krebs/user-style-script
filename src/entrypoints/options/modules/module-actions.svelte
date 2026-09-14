@@ -7,7 +7,7 @@
     Pencil,
     Save,
     Trash,
-  } from 'lucide-svelte';
+  } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { ExtModuleStorage } from '$lib/storage';
@@ -127,6 +127,7 @@
   </Dialog.Content>
 </Dialog.Root>
 
+<svelte:boundary>
 <AlertDialog.Root bind:open={dialogOpen}>
   <AlertDialog.Content>
     <AlertDialog.Header>
@@ -160,3 +161,4 @@
     {/snippet}
   </AlertDialog.Trigger>
 </AlertDialog.Root>
+</svelte:boundary>

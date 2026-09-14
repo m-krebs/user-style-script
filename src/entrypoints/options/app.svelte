@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AlertTriangle } from 'lucide-svelte';
+  import { TriangleAlert } from '@lucide/svelte';
   import { ModeWatcher } from 'mode-watcher';
   import Router from 'svelte-spa-router';
   import CommandNav from '$lib/components/command-nav.svelte';
@@ -7,14 +7,14 @@
   import * as Sidebar from '$lib/components/ui/sidebar/index';
   import { Toaster } from '$lib/components/ui/sonner/index';
   import { isUserScriptsAvailable } from '$lib/utils';
-  import Debug from '$pages/Debug.svelte';
-  import Modules from './modules.svelte';
+  import Debug from './Debug.svelte';
+  import Modules from './modules/modules.svelte';
   import Options from './Options.svelte';
-  import NotFound from './pages/404.svelte';
-  import Appeareance from './pages/settings/Appeareance.svelte';
-  import Settings from './pages/settings/Settings.svelte';
+  import NotFound from './404.svelte';
+  import Appeareance from './settings/Appeareance.svelte';
+  import Settings from './settings/Settings.svelte';
   import Add from './ruleset/add.svelte';
-  import RulesetDetail from './ruleset-detail.svelte';
+  import Edit from './ruleset/edit.svelte';
   import Scripts from './scripts.svelte';
 
   const routes = {
@@ -22,7 +22,7 @@
     '/debug': Debug,
     '/modules': Modules,
     '/ruleset/add': Add,
-    '/ruleset/*': RulesetDetail,
+    '/ruleset/*': Edit,
     '/settings': Settings,
     '/settings/appearance': Appeareance,
     '/scripts': Scripts,
@@ -58,7 +58,7 @@
   <div
     class="mx-auto flex flex-col items-center justify-center gap-3 p-5 align-middle text-xl text-orange-500"
   >
-    <AlertTriangle />
+    <TriangleAlert />
     <p>
       For the extension to work, Chrome requires
       {#if version >= 138}

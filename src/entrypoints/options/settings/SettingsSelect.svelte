@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Select } from 'bits-ui';
-  import { ChevronDown } from 'lucide-svelte';
+  import { ChevronDown } from '@lucide/svelte';
 
   let { items, selected = $bindable() }: { items:any ; selected: any } = $props();
 

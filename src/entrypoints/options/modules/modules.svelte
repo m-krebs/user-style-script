@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CommandNav from '$lib/components/command-nav.svelte';
   import DataTable from '$lib/components/data-table.svelte';
   import CreateModuleDialog from '$lib/components/modules/create-module-dialog.svelte';
   import * as Breadcrumb from '$lib/components/ui/breadcrumb/index';
@@ -23,7 +22,6 @@
 </script>
 
 <div class="px-3">
-  <CommandNav />
   <div class="my-2 flex items-center justify-start gap-2">
     <SidebarTrigger class="p-4" />
     <Separator orientation="vertical" class="mr-2 h-4" />

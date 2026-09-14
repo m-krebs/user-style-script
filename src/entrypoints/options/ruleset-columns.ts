@@ -1,11 +1,11 @@
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table'
 import type { ColumnDef } from '@tanstack/table-core'
 import { createRawSnippet } from 'svelte'
-import RulesetToggle from './ruleset-toggle.svelte'
+import RulesetToggle from './modules/ruleset-toggle.svelte'
 import RulesetActions from './ruleset-actions.svelte'
 import { RulesetStorage } from '$lib/storage'
 import { push } from 'svelte-spa-router'
-import { Ruleset } from '$lib/schema'
+import type { Ruleset } from '$lib/schema'
 import { toast } from 'svelte-sonner'
 import ToastHTML from '$lib/components/toast-html.svelte'
 
