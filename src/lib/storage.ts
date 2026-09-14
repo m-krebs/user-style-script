@@ -8,27 +8,28 @@ import type {
 import { hashCode } from '$lib/utils'
 import { storage } from 'wxt/utils/storage'
 
-export const RulesetStorage = class {
-  static item = storage.defineItem<Ruleset[]>('local:rulesets', {
-    defaultValue: [
-      {
-        id: '30953483948932',
-        active: false,
-        created: Date.now(),
-        updated: Date.now(),
-        modules: [],
-        name: 'Default Example',
-        urls: 'https://example.com/',
-      },
-    ],
-  })
+export const RulesetStorage = {
+  item: storage.defineItem<Ruleset[]>('local:rulesets', {
+    defaultValue: [],
+  }),
 
-  static watch(callback: (changedValue: Ruleset[]) => void) {
-    return RulesetStorage.item.watch(callback)
-  }
+  async getRules(): Promise<Ruleset[]> {
+    return await this.item.getValue()
+  },
 
-  static async create(ruleset: NoIdRuleset) {
-    const rules: Ruleset[] = (await RulesetStorage.item.getValue()) as Ruleset[]
+  async watch(callback: (changedValue: Ruleset[]) => void) {
+    return this.item.watch(callback)
+  },
+
+  async modify(mutator: (rules: Ruleset[]) => Ruleset[]) {
+    const rules = await this.getRules()
+    const updated = mutator(rules)
+    await this.item.setValue(updated)
+    return updated
+  },
+
+  async create(ruleset: NoIdRuleset) {
+    const rules: Ruleset[] = (await this.getRules()) as Ruleset[]
 
     let uuid = crypto.randomUUID()
     while (rules.find((ruleset) => ruleset.id === uuid)) {
@@ -38,57 +39,51 @@ export const RulesetStorage = class {
     const newRuleset: Ruleset = { id: uuid, ...ruleset }
 
     rules.push(newRuleset)
-  }
+  },
 
-  static async update(ruleset: Ruleset) {
-    let rules: Ruleset[] = (await RulesetStorage.item.getValue()) as Ruleset[]
+  // async update(ruleset: Ruleset) {
+  //   let rules: Ruleset[] = (await RulesetStorage.item.getValue()) as Ruleset[]
+  //
+  //   const index = rules.findIndex((rule) => rule.id === ruleset.id)
+  //   if (index === -1) {
+  //     rules.push(ruleset)
+  //   } else {
+  //     rules[index] = ruleset
+  //   }
+  //
+  //   await RulesetStorage.item.setValue(rules)
+  // }
 
-    const index = rules.findIndex((rule) => rule.id === ruleset.id)
-    if (index === -1) {
-      rules.push(ruleset)
-    } else {
-      rules[index] = ruleset
-    }
+  async get(id: string) {
+    return await this.getRules().then((rulesets: Ruleset[]) =>
+      rulesets.find((r) => r.id === id),
+    )
+  },
 
-    await RulesetStorage.item.setValue(rules)
-  }
+  async getAll() {
+    return await this.getRules()
+  },
 
-  static async get(id: string) {
-    return await RulesetStorage.item
-      .getValue()
-      .then((ruleset) => ruleset.find((r) => r.id === id))
-  }
-
-  static async getAll() {
-    return await RulesetStorage.item.getValue()
-  }
-
-  static async delete(id: string) {
-    let rules: Ruleset[] = (await RulesetStorage.item.getValue()) as Ruleset[]
-
-    RulesetStorage.item.setValue(rules.filter((rule) => rule.id !== id))
-  }
+  async deleteRuleset(id: string) {
+    return this.modify((rules: Ruleset[]) => rules.filter((r) => r.id !== id))
+  },
 }
 
-export const ExtModuleStorage = class {
-  static item = storage.defineItem<ExtModule[]>('local:modules', {
-    defaultValue: [
-      {
-        id: '394u39f93999349i39',
-        source:
-          'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
-        name: 'jnotquery',
-        autoUpdate: false,
-      },
-    ],
-  })
+export const ExtModuleStorage = {
+  item: storage.defineItem<ExtModule[]>('local:modules', {
+    defaultValue: [],
+  }),
 
-  static watch(callback: (changedValue: ExtModule[]) => void) {
+  async getModules() {
+    return this.item.getValue()
+  },
+
+  watch(callback: (changedValue: ExtModule[]) => void) {
     return ExtModuleStorage.item.watch(callback)
-  }
+  },
 
-  static async add(module: NoIDExtModule) {
-    let modules: ExtModule[] =
+  async add(module: NoIDExtModule) {
+    const modules: ExtModule[] =
       (await ExtModuleStorage.item.getValue()) as ExtModule[]
 
     let uuid = crypto.randomUUID()
@@ -129,10 +124,10 @@ export const ExtModuleStorage = class {
         hash: hash || null,
       },
     })
-  }
+  },
 
-  static async update(module: ExtModule) {
-    let modules: ExtModule[] =
+  async update(module: ExtModule) {
+    const modules: ExtModule[] =
       (await ExtModuleStorage.item.getValue()) as ExtModule[]
 
     const index = modules.findIndex((m) => m.id === module.id)
@@ -144,22 +139,25 @@ export const ExtModuleStorage = class {
 
     try {
       await ExtModuleStorage.item.setValue(modules)
-      return { success: true, message: 'Saved module' }
+      return { success: true, message: 'Saved module.' }
     } catch (error) {
-      throw Error('Failed to update external module')
+      throw Error(`Failed to update external module: ${error}`)
     }
-  }
+  },
 
-  static async updateContent(id: string) {
-    let modules: ExtModule[] =
+  async updateContent(id: string) {
+    const modules: ExtModule[] =
       (await ExtModuleStorage.item.getValue()) as ExtModule[]
 
-    let module = modules.find((m) => m.id === id)
-    if (!module) throw new Error('External module does not exist')
+    const module = modules.find((m) => m.id === id)
+    if (!module) throw new Error('External module does not exist.')
 
-    let moduleObject: ExtModuleObj | null = await storage.getItem(`local:${id}`)
+    const moduleObject: ExtModuleObj | null = await storage.getItem(
+      `local:${id}`,
+    )
     // TODO: throw different error when fetching fails
-    if (moduleObject === null) throw new Error('Could not find external module')
+    if (moduleObject === null)
+      throw new Error('Could not find external module.')
 
     const responseHead = await fetch(module.source, { method: 'HEAD' })
     const eTag = responseHead.headers.get('ETag')
@@ -192,28 +190,28 @@ export const ExtModuleStorage = class {
     } catch (error) {
       throw Error(`Failed to update module content: ${error}`)
     }
-  }
+  },
 
-  static async get(id: string) {
+  async get(id: string) {
     const ruleset = await ExtModuleStorage.item.getValue()
     return ruleset.find((r) => r.id === id)
-  }
+  },
 
-  static async getAll() {
+  async getAll() {
     return await ExtModuleStorage.item.getValue()
-  }
+  },
 
-  static async delete(id: string) {
-    let modules: ExtModule[] =
+  async delete(id: string) {
+    const modules: ExtModule[] =
       (await ExtModuleStorage.item.getValue()) as ExtModule[]
 
     try {
       await ExtModuleStorage.item.setValue(
         modules.filter((rule) => rule.id !== id),
       )
-      return { success: true, message: 'Successfully deleted module' }
+      return { success: true, message: 'Successfully deleted module.' }
     } catch (error) {
       throw Error(`Failed to delete module: ${error}`)
     }
-  }
+  },
 }

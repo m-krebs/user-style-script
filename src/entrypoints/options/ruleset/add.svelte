@@ -1,9 +1,15 @@
 <script lang="ts">
   import * as Breadcrumb from '$lib/components/ui/breadcrumb/index';
   import { SidebarTrigger } from '$lib/components/ui/sidebar/index';
-
   import Separator from '$lib/components/ui/separator/separator.svelte';
-  import Ruleset from '../ruleset.svelte';
+  import Ruleset from '$lib/components/ruleset/ruleset.svelte';
+  import type { Ruleset as RulesetType } from '$lib/schema';
+
+  const submitFunction = (ruleset: RulesetType) => {
+    // TODO: implement submit function
+    // validate inputs
+    alert(ruleset.name)
+  }
 </script>
 
 <div class="flex h-screen flex-col px-3">
@@ -24,5 +30,5 @@
   </div>
   <Separator />
 
-  <Ruleset />
+  <Ruleset {submitFunction} />
 </div>
