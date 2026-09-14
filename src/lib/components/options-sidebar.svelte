@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Sidebar from '$lib/components/ui/sidebar/index';
-  import { Bug, Home, Puzzle, Settings } from 'lucide-svelte';
+  import { Bug, Home, Puzzle, Settings } from '@lucide/svelte';
   import Separator from '$lib/components/ui/separator/separator.svelte';
 
   let debug = $state(false);

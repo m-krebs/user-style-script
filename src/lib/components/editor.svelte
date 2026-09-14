@@ -14,7 +14,7 @@
 
   let {
     class: className,
-    placeholder = 'Type JavaScript here',
+    placeholder = 'Type here',
     language = 'javascript',
     vim = undefined,
     value = $bindable(undefined),

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CircleAlert } from 'lucide-svelte';
+  import { CircleAlert } from '@lucide/svelte';
   import { isUserScriptsAvailable } from '$lib/utils';
   import { ModeWatcher } from 'mode-watcher';
   import OpenOptions from '$lib/components/open-options.svelte';

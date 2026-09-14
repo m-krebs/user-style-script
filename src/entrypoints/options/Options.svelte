@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PlusCircle } from 'lucide-svelte';
+  import { CirclePlus } from '@lucide/svelte';
   import DataTable from '$lib/components/data-table.svelte';
   import { Button } from '$lib/components/ui/button';
   import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -8,14 +8,14 @@
   import { RulesetStorage } from '$lib/storage';
   import { columns } from './ruleset-columns';
 
-  let data: Ruleset[] = $state([]);
+  let rulesets: Ruleset[] = $state([]);
 
   RulesetStorage.watch((changed) => {
-    data = changed;
+    rulesets = changed;
   });
 
   onMount(async () => {
-    data = await RulesetStorage.getAll();
+    rulesets = await RulesetStorage.getAll();
   });
 </script>
 
@@ -27,9 +27,9 @@
   </div>
   <Separator class="mr-2" />
   <Button href="#/ruleset/add" class="my-2 w-full">
-    Create new<PlusCircle />
+    Create new<CirclePlus />
   </Button>
-  <DataTable bind:data {columns} />
+  <DataTable bind:data={rulesets} {columns} />
 
   <!-- FIXME: this doesn't work in firefox -->
   <!-- {#await browser.userScripts.getScripts()} -->

@@ -6,7 +6,7 @@
   import { Switch } from '$lib/components/ui/switch';
   import { type NoIDExtModule, NoIDExtModuleSchema } from '$lib/schema';
   import { ExtModuleStorage } from '$lib/storage';
-  import { LoaderCircle, PlusCircle } from 'lucide-svelte';
+  import { LoaderCircle, CirclePlus } from '@lucide/svelte';
   import { fade } from 'svelte/transition';
   import { toast } from 'svelte-sonner';
 
@@ -92,7 +92,7 @@
   <Dialog.Trigger>
     {#snippet child({ props })}
       <Button class="my-2 w-full" {...props}>
-        Create new<PlusCircle />
+        Create new<CirclePlus />
       </Button>
     {/snippet}
   </Dialog.Trigger>
@@ -143,7 +143,7 @@
       {#if validating}
         <LoaderCircle class="animate-spin" />
       {:else}
-        <PlusCircle />
+        <CirclePlus />
       {/if}
     </Button>
   </Dialog.Content>

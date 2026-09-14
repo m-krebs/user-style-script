@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
-  import { Pencil, Trash } from 'lucide-svelte';
+  import { Pencil, Trash } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button/index.js';
 
   let { editRuleset, deleteRuleset, name } = $props();
